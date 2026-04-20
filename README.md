@@ -10,6 +10,7 @@ run once after cloning:
 ```bash
 uv sync --dev
 uv run pre-commit install --hook-type pre-commit --hook-type pre-push --hook-type commit-msg
+uv pip install -e .[dev]
 ```
 
 **CI checks** run automatically on every push to `main`:
