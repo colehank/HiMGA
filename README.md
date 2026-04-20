@@ -12,13 +12,6 @@ uv run pre-commit install --hook-type pre-commit --hook-type pre-push --hook-typ
 uv pip install -e .[dev]
 ```
 
-**CI checks** run automatically on every push to `main`:
-
-| Check | Command |
-|---|---|
-| Lint + format | `ruff check . && ruff format --check .` |
-| Tests | `pytest tests/ -v` |
-
 **Releasing a new version** — version is derived from the git tag, no files need editing:
 
 ```bash
