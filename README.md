@@ -1,6 +1,6 @@
 # HiMGA
 
-[![Tests](https://img.shields.io/github/actions/workflow/status/colehank/HiMGA/tests.yml?branch=main)](https://github.com/colehank/HiMGA/actions/workflows/tests.yml)
+[![Tests](https://github.com/colehank/HiMGA/actions/workflows/tests.yml/badge.svg)](https://github.com/colehank/HiMGA/actions)  
 [![PyPI](https://img.shields.io/pypi/v/VneuroTK?color=blue)](https://pypi.org/project/VneuroTK/)  
 Hierarchical Multi-Graph Architecture for conversational memory
 
