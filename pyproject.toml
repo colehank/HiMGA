@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "himga"
+dynamic = ["version"]
+description = "Using MultiGraph to enchance LLM-based agent memory"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/himga"]
+
+[dependency-groups]
+dev = [
+    "hatch-vcs",
+    "ipykernel",
+    "pre-commit",
+    "pytest",
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
