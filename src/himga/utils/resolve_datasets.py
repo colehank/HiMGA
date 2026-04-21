@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 from huggingface_hub import snapshot_download
 from loguru import logger
 
+from ..logger import setup_logger
+
+setup_logger()
 load_dotenv()
 
 ROOT = Path(os.getenv("DATASETS_ROOT", ".cache/datasets"))
