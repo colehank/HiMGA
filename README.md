@@ -26,6 +26,8 @@ Releasing to Pypi:
 git tag vx.x.x
 git push origin vx.x.x   # triggers build + publish to PyPI
 ```
+## Configuration
+Rename `.env_example` to `.env` and fill in the values.
 
 ## resolve benchmarks
 We are using `locomo` and `longmemeval` now.  
