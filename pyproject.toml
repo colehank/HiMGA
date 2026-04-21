@@ -8,7 +8,14 @@ dynamic = ["version"]
 description = "Using MultiGraph to enchance LLM-based agent memory"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "dotenv>=0.9.9",
+    "huggingface-hub>=1.11.0",
+    "loguru>=0.7.3",
+    "requests>=2.33.1",
+    "tqdm>=4.67.3",
+    "tqdm-joblib>=0.0.5",
+]
 
 [tool.hatch.version]
 source = "vcs"
