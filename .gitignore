@@ -13,3 +13,5 @@ example/
 .*_cache/
 uv.toml
 .benchmarks/
+
+.env
