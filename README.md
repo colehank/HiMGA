@@ -13,6 +13,7 @@ pip install higma
 ### for contributors
 Project uses `uv`([to install](https://docs.astral.sh/uv/#installation)) for dependency management.
 
+**Initialize:**
 ```bash
 git clone https://github.com/colehank/HiMGA
 cd HiMGA
@@ -20,14 +21,15 @@ uv sync --dev
 uv run pre-commit install --hook-type pre-commit --hook-type pre-push --hook-type commit-msg
 uv pip install -e .
 ```
-Releasing to Pypi:
 
+**Configuration:**  
+Rename `.env_example` to `.env` and fill in the values.
+
+**Releasing to Pypi:**
 ```bash
 git tag vx.x.x
 git push origin vx.x.x   # triggers build + publish to PyPI
 ```
-## Configuration
-Rename `.env_example` to `.env` and fill in the values.
 
 ## resolve benchmarks
 We are using `locomo` and `longmemeval` now.  
