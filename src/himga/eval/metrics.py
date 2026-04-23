@@ -39,10 +39,14 @@ _nltk_lock = threading.Lock()
 def _ensure_nltk_data() -> None:
     """Download required NLTK corpora if not already present.
 
-    Downloads ``punkt_tab`` (tokeniser) and ``wordnet`` (METEOR).
-    Safe to call multiple times; actual network I/O happens at most once per
-    process.  Raises ``LookupError`` with installation instructions if a
-    corpus cannot be found or downloaded.
+    Downloads ``punkt_tab`` (tokeniser) and ``wordnet`` (METEOR) and forces
+    wordnet extraction.  Safe to call multiple times; network I/O happens at
+    most once per process.  Raises ``LookupError`` if a corpus cannot be
+    downloaded or loaded.
+
+    Note: NLTK 3.9 stores wordnet as a zip on download but only extracts it
+    when first accessed via the corpus reader.  We force that access here so
+    that all subsequent ``nltk.data.find`` calls find the extracted directory.
     """
     global _nltk_ready
     if _nltk_ready:
@@ -50,23 +54,22 @@ def _ensure_nltk_data() -> None:
     with _nltk_lock:
         if _nltk_ready:
             return
-        _required = [
-            ("punkt_tab", "tokenizers/punkt_tab"),
-            ("wordnet", "corpora/wordnet"),
-        ]
-        for corpus, finder_path in _required:
-            try:
-                nltk.data.find(finder_path)
-            except LookupError:
-                nltk.download(corpus, quiet=True)
-                try:
-                    nltk.data.find(finder_path)
-                except LookupError as exc:
-                    raise LookupError(
-                        f"NLTK corpus '{corpus}' is required for BLEU/METEOR metrics "
-                        f"but could not be found or downloaded automatically.\n"
-                        f"Run manually:  python -m nltk.downloader {corpus}"
-                    ) from exc
+        for corpus in ("punkt_tab", "wordnet"):
+            if not nltk.download(corpus, quiet=True):
+                raise LookupError(
+                    f"NLTK corpus '{corpus}' could not be downloaded.\n"
+                    f"Run manually:  python -m nltk.downloader {corpus}"
+                )
+        # Force wordnet extraction — NLTK 3.9 keeps it as a zip until first use.
+        try:
+            from nltk.corpus import wordnet as _wn
+
+            _wn.ensure_loaded()
+        except Exception as exc:
+            raise LookupError(
+                "NLTK wordnet corpus failed to load after download.\n"
+                "Run manually:  python -m nltk.downloader wordnet"
+            ) from exc
         _nltk_ready = True
 
 
@@ -311,6 +314,47 @@ def bert_f1(prediction: str, ground_truth: str) -> float:
     return float(F1.item())
 
 
+def batch_bert_f1(predictions: list[str], ground_truths: list[str]) -> list[float]:
+    """Compute BERTScore F1 for a batch of prediction/reference pairs.
+
+    Significantly faster than calling :func:`bert_f1` in a loop because the
+    underlying model runs once over the entire batch (full GPU utilisation).
+
+    Parameters
+    ----------
+    predictions : list[str]
+        Model outputs.
+    ground_truths : list[str]
+        Reference answers (same length as *predictions*).
+
+    Returns
+    -------
+    list[float]
+        Per-pair BERTScore F1 values in ``[0.0, 1.0]``.
+
+    Raises
+    ------
+    ImportError
+        If ``bert-score`` is not installed.
+    """
+    _require_bert_score()
+    if not predictions:
+        return []
+    valid_mask = [bool(p.strip() and g.strip()) for p, g in zip(predictions, ground_truths)]
+    valid_preds = [p for p, ok in zip(predictions, valid_mask) if ok]
+    valid_refs = [g for g, ok in zip(ground_truths, valid_mask) if ok]
+    scores = [0.0] * len(predictions)
+    if valid_preds:
+        _, _, F1 = _bert_score_fn(valid_preds, valid_refs, lang="en", verbose=False)
+        f1_values = F1.tolist()
+        vi = 0
+        for i, ok in enumerate(valid_mask):
+            if ok:
+                scores[i] = float(f1_values[vi])
+                vi += 1
+    return scores
+
+
 def sbert_similarity(prediction: str, ground_truth: str) -> float:
     """Compute cosine similarity via Sentence-BERT (``all-MiniLM-L6-v2``).
 
@@ -349,6 +393,50 @@ def sbert_similarity(prediction: str, ground_truth: str) -> float:
     return float(_cos_sim(emb_pred, emb_ref).item())
 
 
+def batch_sbert_similarity(predictions: list[str], ground_truths: list[str]) -> list[float]:
+    """Compute SBERT cosine similarity for a batch of prediction/reference pairs.
+
+    Significantly faster than calling :func:`sbert_similarity` in a loop because
+    all strings are encoded in one forward pass.
+
+    Parameters
+    ----------
+    predictions : list[str]
+        Model outputs.
+    ground_truths : list[str]
+        Reference answers (same length as *predictions*).
+
+    Returns
+    -------
+    list[float]
+        Per-pair cosine similarities in ``[-1.0, 1.0]``.
+
+    Raises
+    ------
+    ImportError
+        If ``sentence-transformers`` is not installed.
+    """
+    _require_sbert()
+    if not predictions:
+        return []
+    model = _get_sbert_model()
+    valid_mask = [bool(p.strip() and g.strip()) for p, g in zip(predictions, ground_truths)]
+    valid_preds = [p for p, ok in zip(predictions, valid_mask) if ok]
+    valid_refs = [g for g, ok in zip(ground_truths, valid_mask) if ok]
+    scores = [0.0] * len(predictions)
+    if valid_preds:
+        emb_preds = model.encode(valid_preds, convert_to_tensor=True)
+        emb_refs = model.encode(valid_refs, convert_to_tensor=True)
+        # _cos_sim returns an N×N matrix; diagonal = paired similarity
+        sim_matrix = _cos_sim(emb_preds, emb_refs)
+        vi = 0
+        for i, ok in enumerate(valid_mask):
+            if ok:
+                scores[i] = float(sim_matrix[vi, vi].item())
+                vi += 1
+    return scores
+
+
 # All metric names in the order they appear in output
 ALL_METRICS: tuple[str, ...] = (
     "judge_score",
@@ -375,6 +463,9 @@ def _compute_selected_metrics(
     ground_truth: str,
     judge_score: float,
     include: frozenset[str],
+    *,
+    precomputed_bert: float | None = None,
+    precomputed_sbert: float | None = None,
 ) -> dict[str, float]:
     """Compute only the metrics listed in *include* for a single prediction."""
     result: dict[str, float] = {}
@@ -397,9 +488,15 @@ def _compute_selected_metrics(
     if "meteor" in include:
         result["meteor"] = meteor(prediction, ground_truth)
     if "bert_f1" in include:
-        result["bert_f1"] = bert_f1(prediction, ground_truth)
+        result["bert_f1"] = (
+            precomputed_bert if precomputed_bert is not None else bert_f1(prediction, ground_truth)
+        )
     if "sbert_similarity" in include:
-        result["sbert_similarity"] = sbert_similarity(prediction, ground_truth)
+        result["sbert_similarity"] = (
+            precomputed_sbert
+            if precomputed_sbert is not None
+            else sbert_similarity(prediction, ground_truth)
+        )
     return result
 
 
@@ -459,9 +556,26 @@ def compute_metrics(
     if not results:
         return {"overall": _zero_overall, "by_type": {}}
 
+    # Pre-compute batch metrics to avoid repeated model loads.
+    predictions = [r.prediction for r in results]
+    ground_truths = [r.ground_truth for r in results]
+    batch_bert: list[float] | None = None
+    batch_sbert: list[float] | None = None
+    if "bert_f1" in include:
+        batch_bert = batch_bert_f1(predictions, ground_truths)
+    if "sbert_similarity" in include:
+        batch_sbert = batch_sbert_similarity(predictions, ground_truths)
+
     per_result = [
-        _compute_selected_metrics(r.prediction, r.ground_truth, js, include)
-        for r, js in zip(results, judge_scores)
+        _compute_selected_metrics(
+            r.prediction,
+            r.ground_truth,
+            js,
+            include,
+            precomputed_bert=batch_bert[i] if batch_bert is not None else None,
+            precomputed_sbert=batch_sbert[i] if batch_sbert is not None else None,
+        )
+        for i, (r, js) in enumerate(zip(results, judge_scores))
     ]
 
     active_keys = list(per_result[0].keys())

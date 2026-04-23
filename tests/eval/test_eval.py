@@ -53,6 +53,12 @@ class MockLLMClient:
             return next(self._seq)
         return self._fixed
 
+    def batch_chat(self, requests: list[dict]) -> list[str]:
+        return [
+            self.chat(req["messages"], **{k: v for k, v in req.items() if k != "messages"})
+            for req in requests
+        ]
+
 
 def _make_sample(
     sample_id: str = "s0",

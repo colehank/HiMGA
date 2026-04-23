@@ -34,7 +34,14 @@ jobs:
         run: uv sync --dev
 
       - name: Download NLTK corpora
-        run: uv run python -m nltk.downloader punkt_tab wordnet
+        run: |
+          uv run python -m nltk.downloader punkt_tab wordnet
+          uv run python -c "
+          import nltk
+          nltk.data.find('tokenizers/punkt_tab')
+          from nltk.corpus import wordnet; wordnet.ensure_loaded()
+          print('NLTK data OK')
+          "
 
       - name: Lint
         run: uv run ruff check . && uv run ruff format --check .
@@ -65,7 +72,14 @@ jobs:
         run: uv sync --dev
 
       - name: Download NLTK corpora
-        run: uv run python -m nltk.downloader punkt_tab wordnet
+        run: |
+          uv run python -m nltk.downloader punkt_tab wordnet
+          uv run python -c "
+          import nltk
+          nltk.data.find('tokenizers/punkt_tab')
+          from nltk.corpus import wordnet; wordnet.ensure_loaded()
+          print('NLTK data OK')
+          "
 
       - name: Cache HuggingFace models
         uses: actions/cache@v4

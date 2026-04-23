@@ -215,6 +215,65 @@ def _auto_mode(question_type: QuestionType) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+
+
+def _build_judge_messages(
+    question: str,
+    ground_truth: str,
+    prediction: str,
+    mode: str,
+) -> list[dict]:
+    """Build the OpenAI-format message list for a single judge call."""
+    if mode == "continuous":
+        prompt = _PROMPT_CONTINUOUS.format(
+            question=question,
+            gold_answer=ground_truth,
+            generated_answer=prediction,
+        )
+        return [
+            {"role": "system", "content": _SYSTEM_CONTINUOUS},
+            {"role": "user", "content": prompt},
+        ]
+
+    if mode == "temporal_reasoning":
+        prompt = _PROMPT_TEMPORAL_REASONING.format(
+            question=question, gold_answer=ground_truth, response=prediction
+        )
+    elif mode == "knowledge_update":
+        prompt = _PROMPT_KNOWLEDGE_UPDATE.format(
+            question=question, gold_answer=ground_truth, response=prediction
+        )
+    elif mode == "preference":
+        prompt = _PROMPT_PREFERENCE.format(
+            question=question, gold_answer=ground_truth, response=prediction
+        )
+    else:  # default_binary
+        prompt = _PROMPT_DEFAULT_BINARY.format(
+            question=question, gold_answer=ground_truth, response=prediction
+        )
+
+    return [
+        {"role": "system", "content": _SYSTEM_BINARY},
+        {"role": "user", "content": prompt},
+    ]
+
+
+def _parse_judge_reply(reply: str, mode: str) -> float:
+    """Parse the raw LLM judge reply into a float score."""
+    if mode == "continuous":
+        try:
+            result = json.loads(reply)
+            score = float(result.get("score", 0.0))
+            return max(0.0, min(1.0, score))
+        except (json.JSONDecodeError, ValueError, TypeError):
+            return 0.0
+    text = reply.strip().lower()
+    return 1.0 if (text == "yes" or text.startswith("yes")) else 0.0
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -271,51 +330,9 @@ def judge_answer(
     if llm is None:
         raise ValueError("llm is required for all judge modes except 'adversarial'")
 
-    if mode == "continuous":
-        prompt = _PROMPT_CONTINUOUS.format(
-            question=question,
-            gold_answer=ground_truth,
-            generated_answer=prediction,
-        )
-        raw = llm.chat(
-            [
-                {"role": "system", "content": _SYSTEM_CONTINUOUS},
-                {"role": "user", "content": prompt},
-            ]
-        )
-        try:
-            result = json.loads(raw)
-            score = float(result.get("score", 0.0))
-            return max(0.0, min(1.0, score))
-        except (json.JSONDecodeError, ValueError, TypeError):
-            return 0.0
-
-    # Binary LongMemEval modes
-    if mode == "temporal_reasoning":
-        prompt = _PROMPT_TEMPORAL_REASONING.format(
-            question=question, gold_answer=ground_truth, response=prediction
-        )
-    elif mode == "knowledge_update":
-        prompt = _PROMPT_KNOWLEDGE_UPDATE.format(
-            question=question, gold_answer=ground_truth, response=prediction
-        )
-    elif mode == "preference":
-        prompt = _PROMPT_PREFERENCE.format(
-            question=question, gold_answer=ground_truth, response=prediction
-        )
-    else:  # "default_binary"
-        prompt = _PROMPT_DEFAULT_BINARY.format(
-            question=question, gold_answer=ground_truth, response=prediction
-        )
-
-    raw = llm.chat(
-        [
-            {"role": "system", "content": _SYSTEM_BINARY},
-            {"role": "user", "content": prompt},
-        ]
-    )
-    text = raw.strip().lower()
-    return 1.0 if (text == "yes" or text.startswith("yes")) else 0.0
+    messages = _build_judge_messages(question, ground_truth, prediction, mode)
+    reply = llm.chat(messages)
+    return _parse_judge_reply(reply, mode)
 
 
 def batch_judge(
@@ -325,11 +342,14 @@ def batch_judge(
     mode: str = "auto",
     cache_path: Path | None = None,
 ) -> list[float]:
-    """Judge all *results*, optionally persisting scores to *cache_path*.
+    """Judge all *results* with a single batched LLM call.
 
-    On the first call the scores are computed via *llm* and written to
-    *cache_path* (if provided).  On subsequent calls with the same path the
-    scores are loaded from disk, avoiding duplicate API charges.
+    Adversarial results are scored rule-based (no LLM).  All remaining results
+    are sent to the LLM in one :meth:`~himga.llm.BaseLLMClient.batch_chat` call
+    so the underlying async client can execute them concurrently.
+
+    On the first call the scores are written to *cache_path* (if provided).
+    On subsequent calls with the same path the scores are loaded from disk.
 
     Parameters
     ----------
@@ -352,29 +372,41 @@ def batch_judge(
     if not results:
         return []
 
-    # Load from cache if all question_ids are already cached
+    # Load from cache if all question_ids are already cached.
     if cache_path is not None and cache_path.exists():
         cache: dict[str, float] = json.loads(cache_path.read_text())
         if all(r.question_id in cache for r in results):
             return [cache[r.question_id] for r in results]
 
-    scores: list[float] = []
-    for r in results:
+    scores: list[float | None] = [None] * len(results)
+    llm_indices: list[int] = []
+    llm_modes: list[str] = []
+    llm_requests: list[dict] = []
+
+    for i, r in enumerate(results):
         effective_mode = _auto_mode(r.question_type) if mode == "auto" else mode
-        score = judge_answer(
-            r.question,
-            r.ground_truth,
-            r.prediction,
-            llm=llm,
-            mode=effective_mode,
-        )
-        scores.append(score)
+        if effective_mode == "adversarial":
+            scores[i] = 1.0 if is_unanswerable(r.prediction) else 0.0
+        else:
+            messages = _build_judge_messages(
+                r.question, r.ground_truth, r.prediction, effective_mode
+            )
+            llm_indices.append(i)
+            llm_modes.append(effective_mode)
+            llm_requests.append({"messages": messages})
+
+    if llm_requests:
+        replies = llm.batch_chat(llm_requests)
+        for idx, eff_mode, reply in zip(llm_indices, llm_modes, replies):
+            scores[idx] = _parse_judge_reply(reply, eff_mode)
+
+    final_scores: list[float] = [s for s in scores]  # type: ignore[misc]
 
     if cache_path is not None:
         existing: dict[str, float] = {}
         if cache_path.exists():
             existing = json.loads(cache_path.read_text())
-        existing.update({r.question_id: s for r, s in zip(results, scores)})
+        existing.update({r.question_id: s for r, s in zip(results, final_scores)})
         cache_path.write_text(json.dumps(existing, indent=2))
 
-    return scores
+    return final_scores
