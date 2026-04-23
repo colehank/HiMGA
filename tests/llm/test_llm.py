@@ -122,17 +122,23 @@ class TestGetClient:
         with pytest.raises(ValueError, match="Unknown provider"):
             get_client("nonexistent_provider")
 
-    def test_explicit_anthropic_returns_anthropic_client(self):
+    def test_explicit_anthropic_returns_anthropic_client(self, monkeypatch):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
-        client = get_client("anthropic")
+        with patch("anthropic.Anthropic"):
+            client = get_client("anthropic")
         assert isinstance(client, AnthropicClient)
 
     def test_env_var_anthropic_returns_anthropic_client(self, monkeypatch):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
         monkeypatch.setenv("LLM_PROVIDER", "anthropic")
-        client = get_client()
+        with patch("anthropic.Anthropic"):
+            client = get_client()
         assert isinstance(client, AnthropicClient)
 
     def test_env_var_unknown_raises(self, monkeypatch):
@@ -141,20 +147,26 @@ class TestGetClient:
             get_client()
 
     def test_default_provider_is_anthropic(self, monkeypatch):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
         monkeypatch.delenv("LLM_PROVIDER", raising=False)
-        client = get_client()
+        with patch("anthropic.Anthropic"):
+            client = get_client()
         assert isinstance(client, AnthropicClient)
 
     def test_explicit_provider_overrides_env_var(self, monkeypatch):
+        from unittest.mock import patch
+
         monkeypatch.setenv("LLM_PROVIDER", "nonexistent_provider")
         with pytest.raises(ValueError):
             get_client()  # env var wins when no explicit arg
         # but explicit arg overrides env
         from himga.llm.client import AnthropicClient
 
-        client = get_client("anthropic")
+        with patch("anthropic.Anthropic"):
+            client = get_client("anthropic")
         assert isinstance(client, AnthropicClient)
 
 
@@ -167,21 +179,30 @@ class TestAnthropicClientUnit:
     """Unit tests for AnthropicClient that do not make real API calls."""
 
     def test_is_base_llm_client_instance(self):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
-        client = AnthropicClient()
+        with patch("anthropic.Anthropic"):
+            client = AnthropicClient()
         assert isinstance(client, BaseLLMClient)
 
     def test_default_model_is_sonnet(self):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
-        client = AnthropicClient()
+        with patch("anthropic.Anthropic"):
+            client = AnthropicClient()
         assert client._default_model == "claude-sonnet-4-6"
 
     def test_custom_model_is_stored(self):
+        from unittest.mock import patch
+
         from himga.llm.client import AnthropicClient
 
-        client = AnthropicClient(model="claude-haiku-4-5")
+        with patch("anthropic.Anthropic"):
+            client = AnthropicClient(model="claude-haiku-4-5")
         assert client._default_model == "claude-haiku-4-5"
 
     def test_has_chat_method(self):
