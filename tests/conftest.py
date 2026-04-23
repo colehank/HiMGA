@@ -52,4 +52,9 @@ def ensure_nltk_data() -> None:
         try:
             nltk.data.find(finder_path)
         except LookupError:
-            nltk.download(corpus, quiet=True)
+            success = nltk.download(corpus, quiet=False)
+            if not success:
+                raise LookupError(
+                    f"Failed to download NLTK corpus '{corpus}'. "
+                    f"Run: python -m nltk.downloader {corpus}"
+                )
