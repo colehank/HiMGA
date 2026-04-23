@@ -1,0 +1,1487 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LoCoMo 数据集说明 &#8212; HiMGA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=e74c79bf"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'datasets/locomo';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LongMemEval 数据集说明" href="longmemeval.html" />
+    <link rel="prev" title="himga.eval — API 设计与使用说明" href="../module/eval.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">HiMGA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../module/eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LoCoMo 数据集说明</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="locomo">
+<h1>LoCoMo 数据集说明<a class="headerlink" href="#locomo" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>覆盖：数据集背景、原始格式、字段说明、统计信息、HiMGA 接口映射
+最后更新：2026-04-21</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#id2">数据集背景</a></p></li>
+<li><p><a class="reference internal" href="#id3">文件结构</a></p></li>
+<li><p><a class="reference internal" href="#id4">顶层结构</a></p></li>
+<li><p><a class="reference internal" href="#conversation">conversation 字段详解</a></p></li>
+<li><p><a class="reference internal" href="#qa">qa 字段详解</a></p></li>
+<li><p><a class="reference internal" href="#id7">辅助字段详解</a></p></li>
+<li><p><a class="reference internal" href="#id8">图片消息</a></p></li>
+<li><p><a class="reference internal" href="#id10">数据统计</a></p></li>
+<li><p><a class="reference internal" href="#id11">HiMGA 接口映射</a></p></li>
+<li><p><a class="reference internal" href="#id15">常见使用模式</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>1. 数据集背景<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p><strong>LoCoMo</strong>（Long Conversation Memory）是一个评测 AI 系统长期对话记忆能力的基准数据集，由 Snap Research 发布。</p>
+<p><strong>核心特点</strong>：</p>
+<ul class="simple">
+<li><p><strong>真实长对话</strong>：每个样本是两个真实用户之间跨越数月的多会话对话，平均包含 25+ 个 session，500+ 条发言</p></li>
+<li><p><strong>多模态</strong>：对话中包含大量图片分享，图片通过 BLIP 模型自动生成的标题（<code class="docutils literal notranslate"><span class="pre">blip_caption</span></code>）转为文本</p></li>
+<li><p><strong>丰富标注</strong>：每个样本配有人工标注的 QA pair、事件摘要（event_summary）、观察记录（observation）和会话摘要（session_summary）</p></li>
+<li><p><strong>多维度问题</strong>：QA 覆盖单跳事实、时间推理、多跳推理、开放域和对抗性问题五种类型</p></li>
+</ul>
+<p><strong>评测任务</strong>：给定完整对话历史，回答关于对话内容的自然语言问题。</p>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>2. 文件结构<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$DATASETS_ROOT/locomo/
+├── locomo10.json          # 主评测文件，10 个完整样本
+├── msc_personas_all.json  # MSC 人物设定数据（train/valid/test）
+└── multimodal_dialog/     # 多模态对话原始数据目录
+</pre></div>
+</div>
+<p><strong><code class="docutils literal notranslate"><span class="pre">locomo10.json</span></code></strong>：评测的核心文件，是一个 JSON <strong>列表</strong>，包含 10 个样本。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;locomo10.json&quot;</span><span class="p">))</span>
+<span class="c1"># data: list, len=10</span>
+<span class="c1"># data[0]: dict，一个完整样本</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>3. 顶层结构<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>每个样本是一个 dict，包含以下顶层字段：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;sample_id&quot;:       str,
+  &quot;conversation&quot;:    { ... },
+  &quot;qa&quot;:              [ ... ],
+  &quot;event_summary&quot;:   { ... },
+  &quot;observation&quot;:     { ... },
+  &quot;session_summary&quot;: { ... }
+}
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>样本唯一 ID，如 <code class="docutils literal notranslate"><span class="pre">&quot;conv-26&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">conversation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
+<td><p>完整对话历史，含多个 session（详见第 4 节）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qa</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p>QA pair 列表（详见第 5 节）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_summary</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
+<td><p>按 session 和说话者整理的事件列表（详见第 6 节）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">observation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
+<td><p>按 session 整理的结构化观察（含证据引用）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">session_summary</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
+<td><p>每个 session 的自然语言摘要</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="conversation">
+<h2>4. <code class="docutils literal notranslate"><span class="pre">conversation</span></code> 字段详解<a class="headerlink" href="#conversation" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">conversation</span></code> 是整个样本的对话历史主体，结构如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;speaker_a&quot;: &quot;Caroline&quot;,
+  &quot;speaker_b&quot;: &quot;Melanie&quot;,
+  &quot;session_1_date_time&quot;: &quot;1:56 pm on 8 May, 2023&quot;,
+  &quot;session_1&quot;: [ ... ],
+  &quot;session_2_date_time&quot;: &quot;1:14 pm on 25 May, 2023&quot;,
+  &quot;session_2&quot;: [ ... ],
+  ...
+  &quot;session_19_date_time&quot;: &quot;...&quot;,
+  &quot;session_19&quot;: [ ... ]
+}
+</pre></div>
+</div>
+<section id="id5">
+<h3>4.1 说话者字段<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">speaker_a</span></code></p></td>
+<td><p>主说话者姓名（如 <code class="docutils literal notranslate"><span class="pre">&quot;Caroline&quot;</span></code>）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">speaker_b</span></code></p></td>
+<td><p>次说话者姓名（如 <code class="docutils literal notranslate"><span class="pre">&quot;Melanie&quot;</span></code>）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>两人是现实中的朋友，对话跨越数月，内容涵盖日常生活、情感、工作、爱好等。</p>
+</section>
+<section id="session">
+<h3>4.2 Session 字段命名规则<a class="headerlink" href="#session" title="Link to this heading">#</a></h3>
+<p>Session 的字段以键名编号标识，<strong>没有嵌套容器</strong>，直接平铺在 <code class="docutils literal notranslate"><span class="pre">conversation</span></code> 字典中：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">session_N</span></code> — 第 N 个会话的 turn 列表（N 从 1 开始）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session_N_date_time</span></code> — 第 N 个会话的时间字符串</p></li>
+</ul>
+<p>遍历所有 session 需要按规律过滤键名：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">conv</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;session_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_date_time&quot;</span><span class="p">)</span>
+     <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conv</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">list</span><span class="p">)],</span>
+    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>4.3 时间格式<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;1:56 pm on 8 May, 2023&quot;</span>
+<span class="s2">&quot;1:14 pm on 25 May, 2023&quot;</span>
+<span class="s2">&quot;7:55 pm on 9 June, 2023&quot;</span>
+</pre></div>
+</div>
+<p>格式为 <code class="docutils literal notranslate"><span class="pre">&quot;H:MM</span> <span class="pre">am/pm</span> <span class="pre">on</span> <span class="pre">D</span> <span class="pre">Month,</span> <span class="pre">YYYY&quot;</span></code>。</p>
+</section>
+<section id="turn">
+<h3>4.4 Turn 结构<a class="headerlink" href="#turn" title="Link to this heading">#</a></h3>
+<p>每个 session 是一个 turn 列表，每条 turn 是一个 dict：</p>
+<p><strong>普通文本 turn</strong>：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;speaker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Caroline&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;dia_id&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;D1:1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w">    </span><span class="s2">&quot;Hey Mel! Good to see you! How have you been?&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>含图片的 turn</strong>（详见第 7 节）：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;speaker&quot;</span><span class="p">:</span><span class="w">      </span><span class="s2">&quot;Caroline&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;dia_id&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;D1:5&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;The transgender stories were so inspiring!&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;img_url&quot;</span><span class="p">:</span><span class="w">      </span><span class="p">[</span><span class="s2">&quot;https://i.redd.it/l7hozpetnhlb1.jpg&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;blip_caption&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a photo of a dog walking past a wall with a painting of a woman&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;transgender pride flag mural&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>必有</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">speaker</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>✓</p></td>
+<td><p>说话者姓名，与 <code class="docutils literal notranslate"><span class="pre">speaker_a</span></code>/<code class="docutils literal notranslate"><span class="pre">speaker_b</span></code> 对应</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dia_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>✓</p></td>
+<td><p>Turn 的唯一标识，格式 <code class="docutils literal notranslate"><span class="pre">&quot;D{N}:{M}&quot;</span></code>，N=session编号，M=行号。如 <code class="docutils literal notranslate"><span class="pre">&quot;D1:3&quot;</span></code> 表示第1个session第3行</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">text</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>✓</p></td>
+<td><p>发言文本（图片 turn 中可能为空字符串）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">img_url</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span></code></p></td>
+<td><p>—</p></td>
+<td><p>图片 URL 列表（图片 turn 才有）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blip_caption</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>—</p></td>
+<td><p>BLIP 模型生成的图片描述（图片 turn 才有）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">query</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>—</p></td>
+<td><p>图片搜索时使用的查询词（图片 turn 才有）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="dia-id">
+<h4><code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 详解<a class="headerlink" href="#dia-id" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 是跨 session 全局唯一的 turn 标识，与 QA 的 <code class="docutils literal notranslate"><span class="pre">evidence</span></code> 字段一一对应：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>D1:3  →  session_1 的第 3 条 turn
+D2:7  →  session_2 的第 7 条 turn
+</pre></div>
+</div>
+<p>在同一个样本内，<code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 中的 session 编号与 <code class="docutils literal notranslate"><span class="pre">session_N</span></code> 的 N 一致。</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="qa">
+<h2>5. <code class="docutils literal notranslate"><span class="pre">qa</span></code> 字段详解<a class="headerlink" href="#qa" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">qa</span></code> 是一个列表，每个元素是一个问答对：</p>
+<section id="qa-category-1-4">
+<h3>5.1 普通 QA（category 1-4）<a class="headerlink" href="#qa-category-1-4" title="Link to this heading">#</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What did Caroline research?&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;Adoption agencies&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;evidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;D2:8&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;When did Melanie paint a sunrise?&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w">   </span><span class="mi">2022</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;evidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;D1:12&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">question</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>自然语言问题</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">answer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code> 或 <code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>标准答案。注意：年份等数字答案为 <code class="docutils literal notranslate"><span class="pre">int</span></code> 类型</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">evidence</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span></code></p></td>
+<td><p>支持该答案的 turn 的 <code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 列表，可多条</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">category</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>问题类型编号（1-5，见下表）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="qa-category-5">
+<h3>5.2 对抗性 QA（category=5）<a class="headerlink" href="#qa-category-5" title="Link to this heading">#</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w">          </span><span class="s2">&quot;What did Caroline realize after her charity race?&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;evidence&quot;</span><span class="p">:</span><span class="w">          </span><span class="p">[</span><span class="s2">&quot;D2:3&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w">          </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;adversarial_answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;self-care is important&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>category=5 的特殊之处</strong>：</p>
+<ul class="simple">
+<li><p><strong>没有 <code class="docutils literal notranslate"><span class="pre">answer</span></code> 字段</strong>（或 <code class="docutils literal notranslate"><span class="pre">answer</span></code> 字段不应使用）</p></li>
+<li><p>改为 <code class="docutils literal notranslate"><span class="pre">adversarial_answer</span></code> 字段，内容是对话中<strong>真正可推断的答案</strong></p></li>
+<li><p>这类问题的设计目的是测试模型是否能正确识别出对话中存在答案，而不被问题的误导性表述欺骗</p></li>
+<li><p>HiMGA loader 在解析时自动将 <code class="docutils literal notranslate"><span class="pre">adversarial_answer</span></code> 赋给 <code class="docutils literal notranslate"><span class="pre">QAPair.answer</span></code></p></li>
+</ul>
+</section>
+<section id="category">
+<h3>5.3 category 编号含义<a class="headerlink" href="#category" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>category</p></th>
+<th class="head"><p>HiMGA QuestionType</p></th>
+<th class="head"><p>含义</p></th>
+<th class="head"><p>数量（10个样本）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SINGLE_HOP</span></code></p></td>
+<td><p>单跳事实问题，答案直接在一条 turn 中</p></td>
+<td><p>282</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEMPORAL</span></code></p></td>
+<td><p>时间推理，涉及”什么时候”、时间计算</p></td>
+<td><p>321</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MULTI_HOP</span></code></p></td>
+<td><p>多跳推理，需要关联多条 turn 才能得出答案</p></td>
+<td><p>96</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN_DOMAIN</span></code></p></td>
+<td><p>开放域问题，需要综合多处信息</p></td>
+<td><p>841</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ADVERSARIAL</span></code></p></td>
+<td><p>对抗性问题，测试模型抗干扰能力</p></td>
+<td><p>446</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>总计</strong>：10 个样本共 <strong>1986 个 QA pair</strong>，平均每样本 ~199 个。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>6. 辅助字段详解<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<p>这三个辅助字段在 HiMGA 中存储于 <code class="docutils literal notranslate"><span class="pre">Sample.raw</span></code>，供高层模块（如 HiMGA 的层次化记忆构建）使用。</p>
+<section id="event-summary">
+<h3>6.1 <code class="docutils literal notranslate"><span class="pre">event_summary</span></code><a class="headerlink" href="#event-summary" title="Link to this heading">#</a></h3>
+<p>按 session 和说话者整理的事件列表，每个事件是一句话的自然语言描述：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;events_session_1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Caroline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Caroline attends an LGBTQ support group for the first time.&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Melanie&quot;</span><span class="p">:</span><span class="w">  </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;8 May, 2023&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;events_session_2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Caroline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Caroline participates in a 5K charity race.&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Melanie&quot;</span><span class="p">:</span><span class="w">  </span><span class="p">[</span><span class="s2">&quot;Melanie starts a new yoga class.&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;25 May, 2023&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>键名格式：<code class="docutils literal notranslate"><span class="pre">events_session_{N}</span></code>（注意与 <code class="docutils literal notranslate"><span class="pre">session_N</span></code> 不同）。</p>
+<p>每个条目包含：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Caroline</span></code> / <code class="docutils literal notranslate"><span class="pre">Melanie</span></code>（或对应说话者名）：该人在此 session 中发生的事件列表</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">date</span></code>：session 日期字符串</p></li>
+</ul>
+<p><strong>用途</strong>：为 HiMGA Level 1（片段层）的 Episode 节点提供高质量摘要种子。</p>
+</section>
+<section id="observation">
+<h3>6.2 <code class="docutils literal notranslate"><span class="pre">observation</span></code><a class="headerlink" href="#observation" title="Link to this heading">#</a></h3>
+<p>比 <code class="docutils literal notranslate"><span class="pre">event_summary</span></code> 更细粒度的结构化观察，每条观察都附有对应的 <code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 证据：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;session_1_observation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Caroline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">[</span><span class="s2">&quot;Caroline attended an LGBTQ support group recently and found the transgender stories inspiring.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;D1:3&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="p">[</span><span class="s2">&quot;The support group has made Caroline feel accepted and given her courage to embrace herself.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;D1:7&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Melanie&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">[</span><span class="s2">&quot;Melanie is currently managing kids and work and finds it overwhelming.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;D1:2&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="p">[</span><span class="s2">&quot;Melanie painted a lake sunrise last year which holds special meaning to her.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;D1:14&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>键名格式：<code class="docutils literal notranslate"><span class="pre">session_{N}_observation</span></code>。</p>
+<p>每条观察是一个 <code class="docutils literal notranslate"><span class="pre">[观察文本,</span> <span class="pre">dia_id]</span></code> 二元组，<code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 指向支持该观察的原始 turn。</p>
+</section>
+<section id="session-summary">
+<h3>6.3 <code class="docutils literal notranslate"><span class="pre">session_summary</span></code><a class="headerlink" href="#session-summary" title="Link to this heading">#</a></h3>
+<p>每个 session 的一段自然语言摘要：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;session_1_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Caroline and Melanie had a conversation on 8 May 2023 at 1:56 pm. Caroline mentioned that she attended an LGBTQ support group and was inspired by the transgender stories she heard...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;session_2_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>键名格式：<code class="docutils literal notranslate"><span class="pre">session_{N}_summary</span></code>。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>7. 图片消息<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>LoCoMo 的对话中约有 <strong>116 条图片 turn</strong>（仅 locomo10.json），图片通过 BLIP 模型转为文字描述。</p>
+<section id="id9">
+<h3>原始图片 turn 字段<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;speaker&quot;</span><span class="p">:</span><span class="w">      </span><span class="s2">&quot;Caroline&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;dia_id&quot;</span><span class="p">:</span><span class="w">       </span><span class="s2">&quot;D1:5&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;The transgender stories were so inspiring! I was so happy.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;img_url&quot;</span><span class="p">:</span><span class="w">      </span><span class="p">[</span><span class="s2">&quot;https://i.redd.it/l7hozpetnhlb1.jpg&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;blip_caption&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a photo of a dog walking past a wall with a painting of a woman&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;transgender pride flag mural&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">img_url</span></code></p></td>
+<td><p>图片原始 URL（可能失效）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blip_caption</span></code></p></td>
+<td><p>BLIP 自动生成的图片描述，是主要的文字化信息</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">query</span></code></p></td>
+<td><p>图片的搜索关键词，描述图片的语义主题</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="himga">
+<h3>HiMGA 的处理方式<a class="headerlink" href="#himga" title="Link to this heading">#</a></h3>
+<p>HiMGA loader 将 <code class="docutils literal notranslate"><span class="pre">blip_caption</span></code> 内联到 <code class="docutils literal notranslate"><span class="pre">Message.content</span></code> 中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>原始 text: &quot;The transgender stories were so inspiring!&quot;
+blip_caption: &quot;a photo of a dog walking past a wall with a painting of a woman&quot;
+
+→ Message.content: &quot;[Image: a photo of a dog walking past a wall with a painting of a woman] The transgender stories were so inspiring!&quot;
+</pre></div>
+</div>
+<p>若 <code class="docutils literal notranslate"><span class="pre">text</span></code> 为空则只保留 <code class="docutils literal notranslate"><span class="pre">[Image:</span> <span class="pre">...]</span></code> 部分。<code class="docutils literal notranslate"><span class="pre">img_url</span></code> 和 <code class="docutils literal notranslate"><span class="pre">query</span></code> 不保留到 <code class="docutils literal notranslate"><span class="pre">Message</span></code>（存在 <code class="docutils literal notranslate"><span class="pre">QAPair.raw</span></code> 中如需访问）。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>8. 数据统计<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>基于 <code class="docutils literal notranslate"><span class="pre">locomo10.json</span></code>（10 个样本）的实测数据：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>数值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>样本数</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>总 QA pair 数</p></td>
+<td><p>1986</p></td>
+</tr>
+<tr class="row-even"><td><p>平均每样本 QA 数</p></td>
+<td><p>~199</p></td>
+</tr>
+<tr class="row-odd"><td><p>样本 session 数范围</p></td>
+<td><p>19 – 32</p></td>
+</tr>
+<tr class="row-even"><td><p>样本 turn 数范围</p></td>
+<td><p>369 – 689</p></td>
+</tr>
+<tr class="row-odd"><td><p>图片 turn 数</p></td>
+<td><p>116</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>QA 类型分布</strong>（全部 10 样本）：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>category</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>数量</p></th>
+<th class="head"><p>占比</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>open_domain</p></td>
+<td><p>841</p></td>
+<td><p>42.3%</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>adversarial</p></td>
+<td><p>446</p></td>
+<td><p>22.5%</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>temporal</p></td>
+<td><p>321</p></td>
+<td><p>16.2%</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>single_hop</p></td>
+<td><p>282</p></td>
+<td><p>14.2%</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>multi_hop</p></td>
+<td><p>96</p></td>
+<td><p>4.8%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>各样本详情</strong>：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>sample_id</p></th>
+<th class="head"><p>sessions</p></th>
+<th class="head"><p>turns</p></th>
+<th class="head"><p>qa</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>conv-26</p></td>
+<td><p>19</p></td>
+<td><p>419</p></td>
+<td><p>199</p></td>
+</tr>
+<tr class="row-odd"><td><p>conv-30</p></td>
+<td><p>19</p></td>
+<td><p>369</p></td>
+<td><p>105</p></td>
+</tr>
+<tr class="row-even"><td><p>conv-41</p></td>
+<td><p>32</p></td>
+<td><p>663</p></td>
+<td><p>193</p></td>
+</tr>
+<tr class="row-odd"><td><p>conv-42</p></td>
+<td><p>29</p></td>
+<td><p>629</p></td>
+<td><p>260</p></td>
+</tr>
+<tr class="row-even"><td><p>conv-43</p></td>
+<td><p>29</p></td>
+<td><p>680</p></td>
+<td><p>242</p></td>
+</tr>
+<tr class="row-odd"><td><p>conv-44</p></td>
+<td><p>28</p></td>
+<td><p>675</p></td>
+<td><p>158</p></td>
+</tr>
+<tr class="row-even"><td><p>conv-47</p></td>
+<td><p>31</p></td>
+<td><p>689</p></td>
+<td><p>190</p></td>
+</tr>
+<tr class="row-odd"><td><p>conv-48</p></td>
+<td><p>30</p></td>
+<td><p>681</p></td>
+<td><p>239</p></td>
+</tr>
+<tr class="row-even"><td><p>conv-49</p></td>
+<td><p>25</p></td>
+<td><p>509</p></td>
+<td><p>196</p></td>
+</tr>
+<tr class="row-odd"><td><p>conv-50</p></td>
+<td><p>30</p></td>
+<td><p>568</p></td>
+<td><p>204</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>9. HiMGA 接口映射<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<section id="id12">
+<h3>9.1 原始字段 → HiMGA 字段完整对照<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>原始位置</p></th>
+<th class="head"><p>原始字段</p></th>
+<th class="head"><p>HiMGA 字段</p></th>
+<th class="head"><p>类型变化</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sample_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.sample_id</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sample.conversation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">speaker_a</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.speaker_a</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample.conversation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">speaker_b</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.speaker_b</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sample.conversation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">session_N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.sessions[i].messages</span></code></p></td>
+<td><p>list[dict] → list[Message]</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample.conversation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">session_N_date_time</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.sessions[i].date_str</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">turn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">speaker</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Message.role</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">turn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text</span></code> (+ blip_caption)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Message.content</span></code></p></td>
+<td><p>内联处理</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">turn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dia_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Message.turn_id</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qa_item</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">question</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QAPair.question</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qa_item</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">answer</span></code>（category≠5）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QAPair.answer</span></code></p></td>
+<td><p>any → str</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qa_item</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">adversarial_answer</span></code>（category=5）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QAPair.answer</span></code></p></td>
+<td><p>str（直接赋值）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qa_item</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">category</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QAPair.question_type</span></code></p></td>
+<td><p>int → QuestionType</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qa_item</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">evidence</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QAPair.evidence.turn_ids</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sample</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event_summary</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.raw[&quot;event_summary&quot;]</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">observation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.raw[&quot;observation&quot;]</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sample</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">session_summary</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sample.raw[&quot;session_summary&quot;]</span></code></p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id13">
+<h3>9.2 加载代码<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="c1"># 方式一：统一入口（自动下载缓存）</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;locomo&quot;</span><span class="p">)</span>
+
+<span class="c1"># 方式二：直接传路径</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_locomo</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">load_locomo</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/Volumes/itgz/datasets/locomo&quot;</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples loaded&quot;</span><span class="p">)</span>
+<span class="c1"># → 10 samples loaded</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>9.3 加载后的数据结构<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">sample_id</span><span class="p">)</span>     <span class="c1"># &quot;conv-26&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>       <span class="c1"># &quot;locomo&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">speaker_a</span><span class="p">)</span>     <span class="c1"># &quot;Caroline&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">speaker_b</span><span class="p">)</span>     <span class="c1"># &quot;Melanie&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">sessions</span><span class="p">))</span> <span class="c1"># 19</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">qa_pairs</span><span class="p">))</span> <span class="c1"># 199</span>
+
+<span class="n">sess</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">session_id</span><span class="p">)</span>  <span class="c1"># &quot;1&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">date_str</span><span class="p">)</span>    <span class="c1"># &quot;1:56 pm on 8 May, 2023&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">messages</span><span class="p">))</span>  <span class="c1"># 18</span>
+
+<span class="n">msg</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">role</span><span class="p">)</span>     <span class="c1"># &quot;Caroline&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>  <span class="c1"># &quot;Hey Mel! Good to see you! How have you been?&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">turn_id</span><span class="p">)</span>  <span class="c1"># &quot;D1:1&quot;</span>
+
+<span class="n">qa</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">qa_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qa</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>       <span class="c1"># &quot;When did Caroline go to the LGBTQ support group?&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qa</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>         <span class="c1"># &quot;7 May 2023&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qa</span><span class="o">.</span><span class="n">question_type</span><span class="p">)</span>  <span class="c1"># QuestionType.TEMPORAL</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qa</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">turn_ids</span><span class="p">)</span>  <span class="c1"># [&quot;D1:3&quot;]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id15">
+<h2>10. 常见使用模式<a class="headerlink" href="#id15" title="Link to this heading">#</a></h2>
+<section id="qa-turn">
+<h3>找到 QA 对应的原始 turn<a class="headerlink" href="#qa-turn" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">find_evidence_turns</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">qa</span><span class="p">):</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">qa</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">turn_ids</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sess</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">sessions</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">messages</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">turn_id</span> <span class="ow">in</span> <span class="n">target</span>
+    <span class="p">]</span>
+
+<span class="n">qa</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">qa_pairs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">sess_id</span><span class="p">,</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">find_evidence_turns</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">qa</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Session </span><span class="si">{</span><span class="n">sess_id</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">turn_id</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="category-qa">
+<h3>按 category 筛选 QA<a class="headerlink" href="#category-qa" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuestionType</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_qa_by_type</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">qtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">s</span><span class="p">,</span> <span class="n">qa</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">for</span> <span class="n">qa</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">qa_pairs</span>
+            <span class="k">if</span> <span class="n">qa</span><span class="o">.</span><span class="n">question_type</span> <span class="o">==</span> <span class="n">qtype</span><span class="p">]</span>
+
+<span class="n">temporal</span> <span class="o">=</span> <span class="n">get_qa_by_type</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">QuestionType</span><span class="o">.</span><span class="n">TEMPORAL</span><span class="p">)</span>
+<span class="n">adversarial</span> <span class="o">=</span> <span class="n">get_qa_by_type</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">QuestionType</span><span class="o">.</span><span class="n">ADVERSARIAL</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Temporal: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">temporal</span><span class="p">)</span><span class="si">}</span><span class="s2">, Adversarial: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">adversarial</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>访问辅助字段（event_summary）<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sess_key</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;event_summary&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">speaker</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sample</span><span class="o">.</span><span class="n">speaker_a</span><span class="p">,</span> <span class="n">sample</span><span class="o">.</span><span class="n">speaker_b</span><span class="p">]:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">speaker</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id17">
+<h3>访问 observation（含证据引用）<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sess_key</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;observation&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">speaker</span><span class="p">,</span> <span class="n">obs_list</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">obs_text</span><span class="p">,</span> <span class="n">dia_id</span> <span class="ow">in</span> <span class="n">obs_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">dia_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">obs_text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h3>统计各类型 QA 数量<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="n">type_dist</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+    <span class="n">qa</span><span class="o">.</span><span class="n">question_type</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span>
+    <span class="k">for</span> <span class="n">qa</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">qa_pairs</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">qtype</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">type_dist</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">qtype</span><span class="si">:</span><span class="s2">20s</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../module/eval.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> — API 设计与使用说明</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="longmemeval.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LongMemEval 数据集说明</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 数据集背景</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 文件结构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 顶层结构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversation">4. <code class="docutils literal notranslate"><span class="pre">conversation</span></code> 字段详解</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4.1 说话者字段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#session">4.2 Session 字段命名规则</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">4.3 时间格式</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#turn">4.4 Turn 结构</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dia-id"><code class="docutils literal notranslate"><span class="pre">dia_id</span></code> 详解</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qa">5. <code class="docutils literal notranslate"><span class="pre">qa</span></code> 字段详解</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qa-category-1-4">5.1 普通 QA（category 1-4）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qa-category-5">5.2 对抗性 QA（category=5）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#category">5.3 category 编号含义</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. 辅助字段详解</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-summary">6.1 <code class="docutils literal notranslate"><span class="pre">event_summary</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#observation">6.2 <code class="docutils literal notranslate"><span class="pre">observation</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#session-summary">6.3 <code class="docutils literal notranslate"><span class="pre">session_summary</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">7. 图片消息</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">原始图片 turn 字段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga">HiMGA 的处理方式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">8. 数据统计</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">9. HiMGA 接口映射</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">9.1 原始字段 → HiMGA 字段完整对照</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">9.2 加载代码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">9.3 加载后的数据结构</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">10. 常见使用模式</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qa-turn">找到 QA 对应的原始 turn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#category-qa">按 category 筛选 QA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">访问辅助字段（event_summary）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">访问 observation（含证据引用）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">统计各类型 QA 数量</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, colehank.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

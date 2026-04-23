@@ -1,0 +1,1091 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>himga.llm — API 设计与使用说明 &#8212; HiMGA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=e74c79bf"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module/llm';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="himga.data — API 设计与使用说明" href="data.html" />
+    <link rel="prev" title="himga.memory — API 设计与使用说明" href="memory.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">HiMGA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="docutils literal notranslate"><span class="pre">himga.llm</span></code> — API 设计与使用说明</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="himga-llm-api">
+<h1><code class="docutils literal notranslate"><span class="pre">himga.llm</span></code> — API 设计与使用说明<a class="headerlink" href="#himga-llm-api" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>版本：基于当前实现（2026-04-22）
+模块路径：<code class="docutils literal notranslate"><span class="pre">src/himga/llm/</span></code></p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#id2">概述</a></p></li>
+<li><p><a class="reference internal" href="#id3">模块结构</a></p></li>
+<li><p><a class="reference internal" href="#id4">类型参考</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#basellmclient">BaseLLMClient</a></p></li>
+<li><p><a class="reference internal" href="#anthropicclient">AnthropicClient</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id9">工厂函数</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#get-client">get_client</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id10">消息格式说明</a></p></li>
+<li><p><a class="reference internal" href="#id11">使用示例</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id12">基础调用</a></p></li>
+<li><p><a class="reference internal" href="#id13">自定义模型与参数</a></p></li>
+<li><p><a class="reference internal" href="#mockllmclient">实现 MockLLMClient（测试用）</a></p></li>
+<li><p><a class="reference internal" href="#llm">实现自定义 LLM 接入</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id14">设计决策说明</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>1. 概述<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">himga.llm</span></code> 封装 LLM API 调用，提供统一的 <code class="docutils literal notranslate"><span class="pre">chat</span></code> 接口。<code class="docutils literal notranslate"><span class="pre">agent</span></code>、<code class="docutils literal notranslate"><span class="pre">eval/judge</span></code> 等上层模块只依赖 <code class="docutils literal notranslate"><span class="pre">BaseLLMClient</span></code>，不感知具体 provider，使替换模型或接入新 provider 无需修改上层代码。</p>
+<p><strong>目前提供的实现</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>实现</p></th>
+<th class="head"><p>Provider</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code></p></td>
+<td><p>Anthropic</p></td>
+<td><p>调用 Anthropic Messages API，默认模型 <code class="docutils literal notranslate"><span class="pre">claude-sonnet-4-6</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>2. 模块结构<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>src/himga/llm/
+├── __init__.py    # 导出 BaseLLMClient, AnthropicClient, get_client
+└── client.py      # 抽象接口 + 实现 + 工厂函数
+</pre></div>
+</div>
+<p><strong>公共导入路径</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseLLMClient</span><span class="p">,</span> <span class="n">AnthropicClient</span><span class="p">,</span> <span class="n">get_client</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>3. 类型参考<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="basellmclient">
+<h3>3.1 <code class="docutils literal notranslate"><span class="pre">BaseLLMClient</span></code><a class="headerlink" href="#basellmclient" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BaseLLMClient</span><span class="p">(</span><span class="n">ABC</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>所有 LLM provider 的抽象基类，仅定义一个方法：<code class="docutils literal notranslate"><span class="pre">chat</span></code>。</p>
+<section id="id5">
+<h4>方法<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<section id="chat-messages-model-max-tokens-temperature">
+<h5><code class="docutils literal notranslate"><span class="pre">chat(messages,</span> <span class="pre">*,</span> <span class="pre">model,</span> <span class="pre">max_tokens,</span> <span class="pre">temperature)</span></code><a class="headerlink" href="#chat-messages-model-max-tokens-temperature" title="Link to this heading">#</a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@abstractmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</pre></div>
+</div>
+<p>发送对话请求，返回 assistant 回复文本。</p>
+<p><strong>参数</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">messages</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[dict]</span></code></p></td>
+<td><p>（必填）</p></td>
+<td><p>OpenAI 格式消息列表，详见 <a class="reference internal" href="#id10">消息格式说明</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">model</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>覆盖 client 默认模型。<code class="docutils literal notranslate"><span class="pre">None</span></code> 时使用 client 初始化时设定的模型</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_tokens</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1024</span></code></p></td>
+<td><p>最大生成 token 数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>采样温度。评测场景默认 <code class="docutils literal notranslate"><span class="pre">0.0</span></code> 保证确定性</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>返回</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">str</span></code>：assistant 回复文本，去除首尾空白。</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="anthropicclient">
+<h3>3.2 <code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code><a class="headerlink" href="#anthropicclient" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AnthropicClient</span><span class="p">(</span><span class="n">BaseLLMClient</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>基于 Anthropic Python SDK 的 LLM 客户端。</p>
+<p><strong>依赖</strong>：<code class="docutils literal notranslate"><span class="pre">anthropic</span></code> 包（已在 <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> 中声明），以及环境变量 <code class="docutils literal notranslate"><span class="pre">ANTHROPIC_API_KEY</span></code>。</p>
+<section id="id6">
+<h4>构造函数<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;claude-sonnet-4-6&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">model</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;claude-sonnet-4-6&quot;</span></code></p></td>
+<td><p>默认模型 ID，可在调用 <code class="docutils literal notranslate"><span class="pre">chat</span></code> 时按次覆盖</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h4>实现细节<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code> 自动处理 OpenAI 格式与 Anthropic API 格式之间的差异：消息列表中 <code class="docutils literal notranslate"><span class="pre">role=&quot;system&quot;</span></code> 的条目被提取并作为 Anthropic Messages API 的顶级 <code class="docutils literal notranslate"><span class="pre">system</span></code> 参数传入，其余消息保持原顺序。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 内部处理示例：</span>
+<span class="c1"># 输入：[{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;...&quot;}, {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;}]</span>
+<span class="c1"># → Anthropic API 调用：</span>
+<span class="c1">#     system = &quot;...&quot;</span>
+<span class="c1">#     messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;}]</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>可用模型速查<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>模型 ID</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">claude-sonnet-4-6</span></code></p></td>
+<td><p>默认，均衡性能与速度</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">claude-haiku-4-5-20251001</span></code></p></td>
+<td><p>快速且廉价，适合 judge 批量调用</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">claude-opus-4-7</span></code></p></td>
+<td><p>最强能力，适合复杂推理任务</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>4. 工厂函数<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<section id="get-client">
+<h3>4.1 <code class="docutils literal notranslate"><span class="pre">get_client</span></code><a class="headerlink" href="#get-client" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_client</span><span class="p">(</span><span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseLLMClient</span>
+</pre></div>
+</div>
+<p>根据 provider 名称返回对应的 LLM client 实例。</p>
+<p><strong>参数</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">provider</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>Provider 名称。<code class="docutils literal notranslate"><span class="pre">None</span></code> 时从环境变量 <code class="docutils literal notranslate"><span class="pre">LLM_PROVIDER</span></code> 读取，仍为空则默认 <code class="docutils literal notranslate"><span class="pre">&quot;anthropic&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>支持的 provider</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>provider 值</p></th>
+<th class="head"><p>返回类型</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;anthropic&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>异常</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>异常</p></th>
+<th class="head"><p>触发条件</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Unknown</span> <span class="pre">provider:</span> <span class="pre">'...'</span></code></p></td>
+<td><p>provider 不在支持列表中</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>优先级</strong>：显式参数 &gt; <code class="docutils literal notranslate"><span class="pre">LLM_PROVIDER</span></code> 环境变量 &gt; 默认值 <code class="docutils literal notranslate"><span class="pre">&quot;anthropic&quot;</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 三种等价的获取方式：</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">(</span><span class="s2">&quot;anthropic&quot;</span><span class="p">)</span>                  <span class="c1"># 显式指定</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LLM_PROVIDER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;anthropic&quot;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>                              <span class="c1"># 读环境变量</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>                              <span class="c1"># 无环境变量时默认 anthropic</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>5. 消息格式说明<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">chat</span></code> 接受 OpenAI 格式的消息列表：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>      <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is the capital of France?&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>      <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;And Germany?&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>字段说明</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">role</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;system&quot;</span></code> / <code class="docutils literal notranslate"><span class="pre">&quot;user&quot;</span></code> / <code class="docutils literal notranslate"><span class="pre">&quot;assistant&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">content</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>消息文本内容</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意事项</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code> 消息可放在列表任意位置，<code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code> 会自动提取并处理</p></li>
+<li><p>若消息列表为空，<code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code> 将发送不含任何 user 消息的请求（API 可能报错）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BaseAgent._build_messages</span></code> 生成的消息列表始终符合此格式（一条 system + 一条 user）</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>6. 使用示例<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<section id="id12">
+<h3>6.1 基础调用<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_client</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>  <span class="c1"># 默认 AnthropicClient</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>  <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is 2 + 2?&quot;</span><span class="p">},</span>
+<span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>  <span class="c1"># &quot;4&quot;</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id13">
+<h3>6.2 自定义模型与参数<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnthropicClient</span>
+
+<span class="c1"># 初始化时设置默认模型</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">AnthropicClient</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-haiku-4-5-20251001&quot;</span><span class="p">)</span>
+
+<span class="c1"># 全局默认参数调用</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">([{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Hi&quot;</span><span class="p">}])</span>
+
+<span class="c1"># 单次覆盖参数</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+    <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write a poem about memory.&quot;</span><span class="p">}],</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>    <span class="c1"># 本次用更强的模型</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>             <span class="c1"># 适当提高创造性</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="mockllmclient">
+<h3>6.3 实现 MockLLMClient（测试用）<a class="headerlink" href="#mockllmclient" title="Link to this heading">#</a></h3>
+<p>测试中不产生真实 API 调用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseLLMClient</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MockLLMClient</span><span class="p">(</span><span class="n">BaseLLMClient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;返回固定响应的测试 stub。&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mock answer&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_response</span> <span class="o">=</span> <span class="n">response</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_messages</span> <span class="o">=</span> <span class="n">messages</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_response</span>
+</pre></div>
+</div>
+<p>用法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">llm</span> <span class="o">=</span> <span class="n">MockLLMClient</span><span class="p">(</span><span class="n">response</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">([{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Capital of France?&quot;</span><span class="p">}])</span> <span class="o">==</span> <span class="s2">&quot;Paris&quot;</span>
+<span class="k">assert</span> <span class="n">llm</span><span class="o">.</span><span class="n">call_count</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="llm">
+<h3>6.4 实现自定义 LLM 接入<a class="headerlink" href="#llm" title="Link to this heading">#</a></h3>
+<p>接入 OpenAI 或本地模型时，继承 <code class="docutils literal notranslate"><span class="pre">BaseLLMClient</span></code> 并实现 <code class="docutils literal notranslate"><span class="pre">chat</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseLLMClient</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenAIClient</span><span class="p">(</span><span class="n">BaseLLMClient</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gpt-4o&quot;</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_model</span> <span class="o">=</span> <span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+<p>注册到 <code class="docutils literal notranslate"><span class="pre">get_client</span></code>（可在项目内 monkey-patch 或扩展 <code class="docutils literal notranslate"><span class="pre">get_client</span></code> 函数）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 无需修改 himga.llm，直接实例化使用</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">NullMemory</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">NullMemory</span><span class="p">(),</span> <span class="n">llm</span><span class="o">=</span><span class="n">OpenAIClient</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id14">
+<h2>7. 设计决策说明<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<section id="openai-messages">
+<h3>为什么采用 OpenAI 格式的 messages？<a class="headerlink" href="#openai-messages" title="Link to this heading">#</a></h3>
+<p>OpenAI 格式已成为业界通用标准，Anthropic、Cohere、本地模型（Ollama）等均提供兼容适配层。<code class="docutils literal notranslate"><span class="pre">BaseAgent</span></code> 和 <code class="docutils literal notranslate"><span class="pre">judge.py</span></code> 生成的 prompt 无需感知 provider 差异，降低了上层代码的耦合度。</p>
+</section>
+<section id="temperature-0-0">
+<h3>为什么 <code class="docutils literal notranslate"><span class="pre">temperature=0.0</span></code> 为默认值？<a class="headerlink" href="#temperature-0-0" title="Link to this heading">#</a></h3>
+<p>评测场景要求结果可复现（方便与论文数值对比）。<code class="docutils literal notranslate"><span class="pre">judge_answer</span></code> 在批量调用时也使用 <code class="docutils literal notranslate"><span class="pre">0.0</span></code> 保证判断一致性。对需要随机性的场景（如采样多个候选答案），调用方可按次覆盖。</p>
+</section>
+<section id="id15">
+<h3>为什么不在接口层做重试？<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p>重试属于基础设施关注点（网络可靠性、退避策略），不应耦合进 LLM 抽象。调用方可用 <code class="docutils literal notranslate"><span class="pre">tenacity</span></code> 等库在外部包装，或在具体 client 内部按需实现。</p>
+</section>
+<section id="anthropicclient-init-anthropic">
+<h3>为什么 <code class="docutils literal notranslate"><span class="pre">AnthropicClient.__init__</span></code> 延迟导入 <code class="docutils literal notranslate"><span class="pre">anthropic</span></code>？<a class="headerlink" href="#anthropicclient-init-anthropic" title="Link to this heading">#</a></h3>
+<p>若用户使用其他 provider（如未来的 OpenAIClient），不应因未安装 <code class="docutils literal notranslate"><span class="pre">anthropic</span></code> 包而在 import 阶段报错。延迟导入（在 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> 内部 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">anthropic</span></code>）使模块在不安装该包时仍可被其他代码引用。</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="memory.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">himga.memory</span></code> — API 设计与使用说明</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">himga.data</span></code> — API 设计与使用说明</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 模块结构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 类型参考</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basellmclient">3.1 <code class="docutils literal notranslate"><span class="pre">BaseLLMClient</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">方法</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#chat-messages-model-max-tokens-temperature"><code class="docutils literal notranslate"><span class="pre">chat(messages,</span> <span class="pre">*,</span> <span class="pre">model,</span> <span class="pre">max_tokens,</span> <span class="pre">temperature)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropicclient">3.2 <code class="docutils literal notranslate"><span class="pre">AnthropicClient</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">构造函数</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">实现细节</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">可用模型速查</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">4. 工厂函数</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-client">4.1 <code class="docutils literal notranslate"><span class="pre">get_client</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">5. 消息格式说明</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">6. 使用示例</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">6.1 基础调用</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">6.2 自定义模型与参数</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mockllmclient">6.3 实现 MockLLMClient（测试用）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm">6.4 实现自定义 LLM 接入</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">7. 设计决策说明</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openai-messages">为什么采用 OpenAI 格式的 messages？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-0-0">为什么 <code class="docutils literal notranslate"><span class="pre">temperature=0.0</span></code> 为默认值？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">为什么不在接口层做重试？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropicclient-init-anthropic">为什么 <code class="docutils literal notranslate"><span class="pre">AnthropicClient.__init__</span></code> 延迟导入 <code class="docutils literal notranslate"><span class="pre">anthropic</span></code>？</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, colehank.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

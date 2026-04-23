@@ -1,0 +1,134 @@
+[
+  {
+    "question_id": "q_001",
+    "question_type": "single-session-user",
+    "question": "What did the user buy?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "3 shirts",
+    "answer_session_ids": ["sess_1"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00", "2024/03/10 (Sun) 14:30"],
+    "haystack_session_ids": ["sess_1", "sess_2"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I bought 3 shirts at the mall today."},
+        {"role": "assistant", "content": "Nice, sounds like a good shopping trip!"}
+      ],
+      [
+        {"role": "user",      "content": "Went to the gym this morning."},
+        {"role": "assistant", "content": "Great, keep it up!"}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_002",
+    "question_type": "temporal-reasoning",
+    "question": "When did the user go shopping?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "2024-03-01",
+    "answer_session_ids": ["sess_1"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00", "2024/03/10 (Sun) 14:30"],
+    "haystack_session_ids": ["sess_1", "sess_2"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I bought 3 shirts at the mall today."},
+        {"role": "assistant", "content": "Nice, sounds like a good shopping trip!"}
+      ],
+      [
+        {"role": "user",      "content": "Went to the gym this morning."},
+        {"role": "assistant", "content": "Great, keep it up!"}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_003",
+    "question_type": "multi-session",
+    "question": "How many clothing items did the user buy in total?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": 3,
+    "answer_session_ids": ["sess_1", "sess_3"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00", "2024/03/05 (Tue) 16:00", "2024/03/10 (Sun) 14:30"],
+    "haystack_session_ids": ["sess_1", "sess_3", "sess_2"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I bought 3 shirts."},
+        {"role": "assistant", "content": "Great!"}
+      ],
+      [
+        {"role": "user",      "content": "I also picked up 2 books."},
+        {"role": "assistant", "content": "Nice!"}
+      ],
+      [
+        {"role": "user",      "content": "Went to the gym this morning."},
+        {"role": "assistant", "content": "Great, keep it up!"}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_004",
+    "question_type": "knowledge-update",
+    "question": "What is the user's current job?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "software engineer",
+    "answer_session_ids": ["sess_5"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00", "2024/03/10 (Sun) 14:30"],
+    "haystack_session_ids": ["sess_4", "sess_5"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I work as a teacher."},
+        {"role": "assistant", "content": "That's rewarding work!"}
+      ],
+      [
+        {"role": "user",      "content": "I changed jobs — now I'm a software engineer."},
+        {"role": "assistant", "content": "Congratulations on the new role!"}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_005",
+    "question_type": "single-session-preference",
+    "question": "What coffee does the user prefer?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "The user prefers dark roast coffee without sugar.",
+    "answer_session_ids": ["sess_6"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00"],
+    "haystack_session_ids": ["sess_6"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I only drink dark roast, no sugar."},
+        {"role": "assistant", "content": "Noted! Dark roast, no sugar."}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_006",
+    "question_type": "single-session-assistant",
+    "question": "What resource did the assistant recommend last time?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "The assistant recommended the official Python tutorial at python.org.",
+    "answer_session_ids": ["sess_7"],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00"],
+    "haystack_session_ids": ["sess_7"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "Can you recommend a resource for learning Python?"},
+        {"role": "assistant", "content": "I recommend the official Python tutorial at python.org."}
+      ]
+    ]
+  },
+  {
+    "question_id": "q_007",
+    "question_type": "unknown-future-type",
+    "question": "What is the answer to this unknown type question?",
+    "question_date": "2024/03/15 (Fri) 09:00",
+    "answer": "some answer",
+    "answer_session_ids": [],
+    "haystack_dates": ["2024/03/01 (Fri) 10:00"],
+    "haystack_session_ids": ["sess_8"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "Some content."},
+        {"role": "assistant", "content": "Some response."}
+      ]
+    ]
+  }
+]

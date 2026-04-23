@@ -1,45 +1,69 @@
 # HiMGA
-[![Tests](https://github.com/colehank/HiMGA/actions/workflows/tests.yml/badge.svg)](https://github.com/colehank/HiMGA/actions) [![PyPI](https://img.shields.io/pypi/v/VneuroTK?color=blue)](https://pypi.org/project/VneuroTK/)  
+[![Tests](https://github.com/colehank/HiMGA/actions/workflows/tests.yml/badge.svg)](https://github.com/colehank/HiMGA/actions) [![PyPI](https://img.shields.io/pypi/v/himga?color=blue)](https://pypi.org/project/himga/)
 
 HiMGA is a Hierarchical Multi-Graph Architecture for conversational memory.
 
-## installation
-### for user
-**not support yet, himga still in dev.**
+## Installation
+
+### User
+
+Core install — includes exact_match, F1, ROUGE, BLEU, METEOR:
+
 ```bash
-pip install higma
+pip install himga
 ```
 
-### for contributors
-Project uses `uv`([to install](https://docs.astral.sh/uv/#installation)) for dependency management.
+Full eval metrics — adds BERTScore and Sentence-BERT:
 
-**Initialize:**
+```bash
+pip install "himga[eval]"
+```
+
+GPU acceleration (BERTScore / SBERT auto-detect CUDA, no code changes needed):
+
+```bash
+# Install CUDA-compatible PyTorch first, then eval extras
+pip install torch --index-url https://download.pytorch.org/whl/cu118
+pip install "himga[eval]"
+```
+
+### Contributor
+
+Project uses [`uv`](https://docs.astral.sh/uv/#installation) for dependency management.
+
 ```bash
 git clone https://github.com/colehank/HiMGA
 cd HiMGA
-uv sync --dev
+uv sync --dev                  # installs all deps including eval extras
 uv run pre-commit install --hook-type pre-commit --hook-type pre-push --hook-type commit-msg
-uv pip install -e .
 ```
 
-**Configuration:**  
-Rename `.env_example` to `.env` and fill in the values.
+Copy `.env_example` to `.env` and fill in the required values.
 
-**Releasing to Pypi:**
+**Running tests:**
+
+```bash
+uv run pytest tests/            # fast tests only (default)
+uv run pytest tests/ --run-slow # include BERTScore / SBERT model tests
+uv run pytest tests/ --run-integration  # include real API calls (requires .env)
+```
+
+**Releasing to PyPI:**
+
 ```bash
 git tag vx.x.x
-git push origin vx.x.x   # triggers build + publish to PyPI
+git push origin vx.x.x          # triggers build + publish to PyPI
 ```
 
-## resolve benchmarks
-We are using `locomo` and `longmemeval` now.  
-Set `.env` file with `DATASETS_ROOT` (default to `.cache/datasets`)pointing to the directory 
-where your datasets exsists or where they need to be downloaded.
+## Benchmarks
 
-to resolve them, simply:
+HiMGA is evaluated on `locomo` and `longmemeval`.
+Set `DATASETS_ROOT` in `.env` (defaults to `.cache/datasets`) to the directory where datasets
+exist or should be downloaded.
+
 ```python
 from himga.utils import get_dataset
-## get_dataset() -> download if dataset not found locally, and return local path
-locomo = get_dataset("locomo") 
-longmem = get_dataset("longmemeval")
+
+locomo   = get_dataset("locomo")       # downloads if not found locally, returns local path
+longmem  = get_dataset("longmemeval")
 ```

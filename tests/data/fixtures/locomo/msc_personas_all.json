@@ -1,0 +1,17 @@
+{
+  "train": [
+    {
+      "Speaker 1": ["I enjoy listening to metal music.", "I like Metallica.", "I wear leather boots."],
+      "Speaker 2": ["I like classic rock music.", "I am vegan.", "I love early mornings."],
+      "in_dataset": 0
+    }
+  ],
+  "valid": [],
+  "test": [
+    {
+      "Speaker 1": ["I play basketball.", "I like to sleep late."],
+      "Speaker 2": ["I am in college.", "I play collegiate basketball."],
+      "in_dataset": 1
+    }
+  ]
+}

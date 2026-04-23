@@ -12,6 +12,12 @@ example/
 .claude/
 .*_cache/
 uv.toml
+requirements-local.txt
 .benchmarks/
-
+.cache/
 .env
+ref_proj/
+.DS_Store
+
+docs_dev/docs/_build/
+outputs/

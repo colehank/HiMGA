@@ -1,0 +1,86 @@
+[
+  {
+    "sample_id": "conv-test-1",
+    "conversation": {
+      "speaker_a": "Alice",
+      "speaker_b": "Bob",
+      "session_1_date_time": "2:00 pm on 1 Jan, 2024",
+      "session_1": [
+        {"speaker": "Alice", "dia_id": "D1:1", "text": "Hi Bob!"},
+        {"speaker": "Bob",   "dia_id": "D1:2", "text": "Hey Alice!"},
+        {"speaker": "Alice", "dia_id": "D1:3", "text": "",
+         "img_url": ["https://example.com/a.jpg"],
+         "blip_caption": "a dog playing in the park",
+         "query": "dog park"},
+        {"speaker": "Bob",   "dia_id": "D1:4", "text": "Great photo!",
+         "img_url": ["https://example.com/b.jpg"],
+         "blip_caption": "a sunset over mountains",
+         "query": "mountain sunset"}
+      ],
+      "session_2_date_time": "3:00 pm on 2 Jan, 2024",
+      "session_2": [
+        {"speaker": "Alice", "dia_id": "D2:1", "text": "Where are you from originally?"},
+        {"speaker": "Bob",   "dia_id": "D2:2", "text": "I moved here from New York back in 2020."}
+      ],
+      "session_3_date_time": "10:00 am on 3 Jan, 2024"
+    },
+    "qa": [
+      {
+        "question": "Where did Bob move from?",
+        "answer": "New York",
+        "evidence": ["D2:2"],
+        "category": 1
+      },
+      {
+        "question": "When did Bob move?",
+        "answer": 2020,
+        "evidence": ["D2:2"],
+        "category": 2
+      },
+      {
+        "question": "Why did Bob and Alice reconnect?",
+        "answer": "They met as old friends",
+        "evidence": ["D1:1", "D1:2"],
+        "category": 3
+      },
+      {
+        "question": "Tell me about Bob's background.",
+        "answer": "He moved from New York.",
+        "evidence": ["D2:2"],
+        "category": 4
+      },
+      {
+        "question": "Did Bob move from Los Angeles?",
+        "adversarial_answer": "Bob moved from New York, not Los Angeles.",
+        "evidence": ["D2:2"],
+        "category": 5
+      }
+    ],
+    "event_summary": {
+      "events_session_1": {
+        "Alice": ["Alice greeted Bob."],
+        "Bob": ["Bob responded to Alice's greeting."],
+        "date": "1 Jan, 2024"
+      },
+      "events_session_2": {
+        "Alice": [],
+        "Bob": ["Bob mentioned moving from New York in 2020."],
+        "date": "2 Jan, 2024"
+      }
+    },
+    "observation": {
+      "session_1_observation": {
+        "Alice": [["Alice greeted Bob warmly.", "D1:1"]],
+        "Bob":   [["Bob responded positively.", "D1:2"]]
+      },
+      "session_2_observation": {
+        "Alice": [],
+        "Bob":   [["Bob mentioned he moved from New York in 2020.", "D2:2"]]
+      }
+    },
+    "session_summary": {
+      "session_1_summary": "Alice and Bob greeted each other.",
+      "session_2_summary": "Bob shared that he moved from New York."
+    }
+  }
+]

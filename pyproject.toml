@@ -9,12 +9,25 @@ description = "Using MultiGraph to enchance LLM-based agent memory"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "anthropic>=0.50.0",
     "dotenv>=0.9.9",
     "huggingface-hub>=1.11.0",
+    "ijson>=3.5.0",
     "loguru>=0.7.3",
+    "nltk>=3.9.0",
     "requests>=2.33.1",
+    "rouge-score>=0.1.2",
     "tqdm>=4.67.3",
     "tqdm-joblib>=0.0.5",
+]
+
+# Install for full eval metrics: pip install "himga[eval]"
+# For GPU acceleration, install CUDA-compatible PyTorch first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu118
+[project.optional-dependencies]
+eval = [
+    "bert-score>=0.3.13",
+    "sentence-transformers>=3.0.0",
 ]
 
 [tool.hatch.version]
@@ -25,11 +38,17 @@ packages = ["src/himga"]
 
 [dependency-groups]
 dev = [
+    # eval extras — needed for full metric suite
+    "bert-score>=0.3.13",
+    "sentence-transformers>=3.0.0",
+    # tooling
     "hatch-vcs",
-    "ipykernel",
     "pre-commit",
     "pytest",
     "ruff",
+    "sphinx>=7.0",
+    "pydata-sphinx-theme>=0.15",
+    "myst-parser>=3.0",
 ]
 
 [tool.ruff]
@@ -39,3 +58,10 @@ src = ["src"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
 ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: requires real API keys / external services; opt-in with --run-integration",
+    "slow: loads large ML models or downloads data; opt-in with --run-slow",
+]

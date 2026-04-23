@@ -1,0 +1,1279 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>himga.eval — API 设计与使用说明 &#8212; HiMGA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=e74c79bf"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module/eval';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LoCoMo 数据集说明" href="../datasets/locomo.html" />
+    <link rel="prev" title="himga.data — API 设计与使用说明" href="data.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">HiMGA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage/staging.html">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> — API 设计与使用说明</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="himga-eval-api">
+<h1><code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> — API 设计与使用说明<a class="headerlink" href="#himga-eval-api" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>版本：基于当前实现（2026-04-22）
+模块路径：<code class="docutils literal notranslate"><span class="pre">src/himga/eval/</span></code></p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#id2">概述</a></p></li>
+<li><p><a class="reference internal" href="#id3">模块结构</a></p></li>
+<li><p><a class="reference internal" href="#id4">安装</a></p></li>
+<li><p><a class="reference internal" href="#id5">类型参考</a></p></li>
+<li><p><a class="reference internal" href="#id6">函数参考</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#run-eval-runner-py">run_eval（runner.py）</a></p></li>
+<li><p><a class="reference internal" href="#is-unanswerable-judge-py">is_unanswerable（judge.py）</a></p></li>
+<li><p><a class="reference internal" href="#judge-answer-judge-py">judge_answer（judge.py）</a></p></li>
+<li><p><a class="reference internal" href="#batch-judge-judge-py">batch_judge（judge.py）</a></p></li>
+<li><p><a class="reference internal" href="#compute-metrics-metrics-py">compute_metrics（metrics.py）</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id7">指标一览</a></p></li>
+<li><p><a class="reference internal" href="#id8">评测流水线</a></p></li>
+<li><p><a class="reference internal" href="#id9">使用示例</a></p></li>
+<li><p><a class="reference internal" href="#id12">指标对齐说明</a></p></li>
+<li><p><a class="reference internal" href="#id13">设计决策说明</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>1. 概述<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> 驱动完整评测循环，输出与 MAGMA Table 1（LoCoMo）和 Table 2（LongMemEval）对齐的分类指标。</p>
+<p><strong>三层结构</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>层</p></th>
+<th class="head"><p>文件</p></th>
+<th class="head"><p>职责</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Runner</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">runner.py</span></code></p></td>
+<td><p>驱动预测循环，收集 <code class="docutils literal notranslate"><span class="pre">EvalResult</span></code>；纯本地计算，不调用 judge</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Judge</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">judge.py</span></code></p></td>
+<td><p>LLM-as-a-Judge 评分，支持多种评分模式与结果缓存</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Metrics</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metrics.py</span></code></p></td>
+<td><p>12 项指标聚合，按 <code class="docutils literal notranslate"><span class="pre">QuestionType</span></code> 分组输出</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>三层故意分离：runner 跑完后，judge 和 metrics 可离线反复调用，重跑指标不需要重新跑模型。</p>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>2. 模块结构<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>src/himga/eval/
+├── __init__.py    # 导出 EvalResult, run_eval, compute_metrics
+├── runner.py      # 评测主循环
+├── judge.py       # LLM-as-a-Judge 打分
+└── metrics.py     # 12 项指标聚合
+</pre></div>
+</div>
+<p><strong>公共导入路径</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvalResult</span><span class="p">,</span> <span class="n">run_eval</span><span class="p">,</span> <span class="n">compute_metrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">judge_answer</span><span class="p">,</span> <span class="n">batch_judge</span><span class="p">,</span> <span class="n">is_unanswerable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">token_f1</span><span class="p">,</span> <span class="n">ALL_METRICS</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>3. 安装<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p><strong>核心安装</strong>（包含 exact_match、F1、ROUGE、BLEU、METEOR）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>himga
+<span class="c1"># 或</span>
+uv<span class="w"> </span>add<span class="w"> </span>himga
+</pre></div>
+</div>
+<p><strong>完整指标</strong>（额外包含 BERTScore、Sentence-BERT）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;himga[eval]&quot;</span>
+<span class="c1"># 或</span>
+uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;himga[eval]&quot;</span>
+</pre></div>
+</div>
+<p><strong>GPU 加速</strong>（BERTScore / SBERT 自动检测 CUDA，无需代码改动）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 先安装 CUDA 版 PyTorch，再安装 eval extras</span>
+pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu118
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;himga[eval]&quot;</span>
+</pre></div>
+</div>
+<p>开发环境（<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">--dev</span></code>）默认安装所有依赖，包含完整 eval extras。</p>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>4. 类型参考<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<section id="evalresult">
+<h3><code class="docutils literal notranslate"><span class="pre">EvalResult</span></code><a class="headerlink" href="#evalresult" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EvalResult</span><span class="p">:</span>
+    <span class="n">sample_id</span><span class="p">:</span>     <span class="nb">str</span>
+    <span class="n">question_id</span><span class="p">:</span>   <span class="nb">str</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="n">QuestionType</span>
+    <span class="n">question</span><span class="p">:</span>      <span class="nb">str</span>
+    <span class="n">ground_truth</span><span class="p">:</span>  <span class="nb">str</span>
+    <span class="n">prediction</span><span class="p">:</span>    <span class="nb">str</span>
+</pre></div>
+</div>
+<p>单个 QA pair 的预测记录，是 runner → judge → metrics 流水线的数据载体。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>来自 <code class="docutils literal notranslate"><span class="pre">Sample.sample_id</span></code>，用于追溯来源</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">question_id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>来自 <code class="docutils literal notranslate"><span class="pre">QAPair.question_id</span></code>，作为 judge 缓存的键</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">question_type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QuestionType</span></code></p></td>
+<td><p>问题类型，决定 judge 模式并用于 <code class="docutils literal notranslate"><span class="pre">by_type</span></code> 分组</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">question</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>问题文本，传给 judge prompt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ground_truth</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>标准答案</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">prediction</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Agent 生成的答案</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h2>5. 函数参考<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="run-eval-runner-py">
+<h3>5.1 <code class="docutils literal notranslate"><span class="pre">run_eval</span></code>（runner.py）<a class="headerlink" href="#run-eval-runner-py" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_eval</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sample</span><span class="p">],</span>
+    <span class="n">agent</span><span class="p">:</span> <span class="n">BaseAgent</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EvalResult</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>驱动预测循环，每个 Sample 前 reset memory，然后依次回答所有 QA pair。</p>
+<p><strong>注意</strong>：<code class="docutils literal notranslate"><span class="pre">run_eval</span></code> 不调用 judge，不计算指标，只收集预测结果。</p>
+</section>
+<hr class="docutils" />
+<section id="is-unanswerable-judge-py">
+<h3>5.2 <code class="docutils literal notranslate"><span class="pre">is_unanswerable</span></code>（judge.py）<a class="headerlink" href="#is-unanswerable-judge-py" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">is_unanswerable</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>规则匹配：判断 <code class="docutils literal notranslate"><span class="pre">text</span></code> 是否表达了”无法回答”的意思。用于 LoCoMo <code class="docutils literal notranslate"><span class="pre">ADVERSARIAL</span></code> 类型问题的 judge，无需 LLM 调用。</p>
+<p>匹配 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;n/a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;unanswerable&quot;</span></code> 等精确值，以及 <code class="docutils literal notranslate"><span class="pre">&quot;not</span> <span class="pre">mentioned&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cannot</span> <span class="pre">answer&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">information&quot;</span></code> 等 14 个短语模式。</p>
+</section>
+<hr class="docutils" />
+<section id="judge-answer-judge-py">
+<h3>5.3 <code class="docutils literal notranslate"><span class="pre">judge_answer</span></code>（judge.py）<a class="headerlink" href="#judge-answer-judge-py" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">judge_answer</span><span class="p">(</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">prediction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">:</span> <span class="n">BaseLLMClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</pre></div>
+</div>
+<p>判断 <code class="docutils literal notranslate"><span class="pre">prediction</span></code> 是否正确，返回 <code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0]</span></code> 的分数。</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">mode</span></code> 参数</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>模式</p></th>
+<th class="head"><p>返回值</p></th>
+<th class="head"><p>适用类型</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0]</span></code></p></td>
+<td><p>LoCoMo SINGLE_HOP / MULTI_HOP / TEMPORAL / OPEN_DOMAIN</p></td>
+<td><p>LLM 返回 JSON <code class="docutils literal notranslate"><span class="pre">{&quot;score&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;reasoning&quot;:</span> <span class="pre">str}</span></code>，使用 0.0/0.2/0.4/0.6/0.8/1.0 六档评分量表</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;adversarial&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>LoCoMo ADVERSARIAL</p></td>
+<td><p>规则匹配，<strong>不调用 LLM</strong>；<code class="docutils literal notranslate"><span class="pre">is_unanswerable(prediction)</span></code> 为 True 则得 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;temporal_reasoning&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>LongMemEval TEMPORAL_REASONING</p></td>
+<td><p>允许 off-by-one 日期误差</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;knowledge_update&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>LongMemEval KNOWLEDGE_UPDATE</p></td>
+<td><p>包含最新答案即正确，即使同时包含旧信息</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;preference&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>LongMemEval SINGLE_SESSION_PREFERENCE</p></td>
+<td><p>按 rubric 判断，不要求完全覆盖</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;default_binary&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>LongMemEval SINGLE_SESSION_USER / ASSISTANT / MULTI_SESSION</p></td>
+<td><p>通用二元判断</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意</strong>：<code class="docutils literal notranslate"><span class="pre">mode=&quot;adversarial&quot;</span></code> 时 <code class="docutils literal notranslate"><span class="pre">llm</span></code> 可为 <code class="docutils literal notranslate"><span class="pre">None</span></code>；其他模式要求传入 <code class="docutils literal notranslate"><span class="pre">llm</span></code>，否则抛出 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>。</p>
+</section>
+<hr class="docutils" />
+<section id="batch-judge-judge-py">
+<h3>5.4 <code class="docutils literal notranslate"><span class="pre">batch_judge</span></code>（judge.py）<a class="headerlink" href="#batch-judge-judge-py" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">batch_judge</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EvalResult</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">:</span> <span class="n">BaseLLMClient</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">cache_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>批量 judge，支持结果缓存到本地 JSON 文件。</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">mode=&quot;auto&quot;</span></code>（推荐）</strong>：根据每条结果的 <code class="docutils literal notranslate"><span class="pre">question_type</span></code> 自动选择对应的 judge 模式，无需手动指定。映射关系：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>QuestionType</p></th>
+<th class="head"><p>自动选择的 mode</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SINGLE_HOP / MULTI_HOP / TEMPORAL / OPEN_DOMAIN</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">continuous</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>ADVERSARIAL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">adversarial</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>TEMPORAL_REASONING</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">temporal_reasoning</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>KNOWLEDGE_UPDATE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">knowledge_update</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>SINGLE_SESSION_PREFERENCE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">preference</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>SINGLE_SESSION_USER / ASSISTANT / MULTI_SESSION</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default_binary</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>缓存行为</strong>：若 <code class="docutils literal notranslate"><span class="pre">cache_path</span></code> 指向已存在的文件且包含所有 <code class="docutils literal notranslate"><span class="pre">question_id</span></code>，直接从缓存读取，不调用 LLM；否则补充计算缺失项并更新文件。</p>
+</section>
+<hr class="docutils" />
+<section id="compute-metrics-metrics-py">
+<h3>5.5 <code class="docutils literal notranslate"><span class="pre">compute_metrics</span></code>（metrics.py）<a class="headerlink" href="#compute-metrics-metrics-py" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_metrics</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EvalResult</span><span class="p">],</span>
+    <span class="n">judge_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</pre></div>
+</div>
+<p>将预测结果和 judge 分数聚合为多维指标。</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">metrics</span></code> 参数</strong>：控制计算哪些指标。<code class="docutils literal notranslate"><span class="pre">None</span></code>（默认）计算全部 12 项。传入子集可跳过重量级模型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 跳过 BERTScore / SBERT，快速运行</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;judge_score&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge1&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>返回结构</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;overall&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;judge_score&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;exact_match&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;f1&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;rouge1&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;rouge2&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;rougeL&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;bleu1&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;bleu2&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;bleu4&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;meteor&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;bert_f1&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>          <span class="c1"># 需要 himga[eval]</span>
+        <span class="s2">&quot;sbert_similarity&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="c1"># 需要 himga[eval]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;by_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;single_hop&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;judge_score&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="p">},</span>
+        <span class="c1"># 仅包含 results 中实际出现的 QuestionType</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>空输入</strong>：<code class="docutils literal notranslate"><span class="pre">results=[]</span></code> 时返回全零 <code class="docutils literal notranslate"><span class="pre">overall</span></code> 和空 <code class="docutils literal notranslate"><span class="pre">by_type</span></code>，不抛异常。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>6. 指标一览<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>依赖</p></th>
+<th class="head"><p>范围</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">judge_score</span></code></p></td>
+<td><p>LLM（外部）</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>LLM-as-a-Judge 评分</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">exact_match</span></code></p></td>
+<td><p>无</p></td>
+<td><p>{0.0, 1.0}</p></td>
+<td><p>大小写不敏感完全匹配</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">f1</span></code></p></td>
+<td><p>无</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>Token-level F1（SQuAD 风格，标点替换为空格）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rouge1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rouge-score</span></code>（核心依赖）</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>ROUGE-1 F1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rouge2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rouge-score</span></code></p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>ROUGE-2 F1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rougeL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rouge-score</span></code></p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>ROUGE-L F1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bleu1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nltk</span></code>（核心依赖）</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>BLEU-1，SmoothingFunction.method1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bleu2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nltk</span></code></p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>BLEU-2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bleu4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nltk</span></code></p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>BLEU-4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">meteor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nltk</span></code> + wordnet 语料</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>METEOR</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bert_f1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bert-score</span></code>（<strong>eval extra</strong>）</p></td>
+<td><p>[0.0, 1.0]</p></td>
+<td><p>BERTScore F1，模型 <code class="docutils literal notranslate"><span class="pre">roberta-large</span></code>（~1.3 GB）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sentence-transformers</span></code>（<strong>eval extra</strong>）</p></td>
+<td><p>[-1.0, 1.0]</p></td>
+<td><p>Sentence-BERT 余弦相似度，模型 <code class="docutils literal notranslate"><span class="pre">all-MiniLM-L6-v2</span></code>（~80 MB）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">bert_f1</span></code> 和 <code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code> 未安装 eval extras 时调用会抛出 <code class="docutils literal notranslate"><span class="pre">ImportError</span></code>，并提示安装命令。</p>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>7. 评测流水线<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>load_dataset(&quot;locomo&quot;)
+        │
+        ▼
+  list[Sample]
+        │
+        ▼  run_eval(dataset, agent)
+        │    ├── agent.memory.reset()         ← 每个 sample 前
+        │    ├── agent.ingest_sample(sample)
+        │    └── agent.answer(qa.question)    ← 每个 QA pair
+        │
+        ▼
+  list[EvalResult]
+        │
+        ├─────────────────────────────────────────────┐
+        ▼                                             ▼
+ batch_judge(results, llm, cache_path)       compute_metrics(results, [0.0]*n)
+ (mode=&quot;auto&quot;，按 question_type 路由)         (离线立即计算 F1/ROUGE/BLEU/METEOR)
+        │
+        ▼
+  list[float]  (judge_scores)
+        │
+        ▼
+ compute_metrics(results, judge_scores)
+        │
+        ▼
+  {&quot;overall&quot;: {...}, &quot;by_type&quot;: {...}}
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>8. 使用示例<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<section id="locomo">
+<h3>完整评测流水线（LoCoMo）<a class="headerlink" href="#locomo" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">NullMemory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnthropicClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_eval</span><span class="p">,</span> <span class="n">compute_metrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_judge</span>
+
+<span class="n">agent_llm</span> <span class="o">=</span> <span class="n">AnthropicClient</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-sonnet-4-6&quot;</span><span class="p">)</span>
+<span class="n">judge_llm</span> <span class="o">=</span> <span class="n">AnthropicClient</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-haiku-4-5-20251001&quot;</span><span class="p">)</span>
+<span class="n">cache</span>     <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;outputs/locomo_judge_cache.json&quot;</span><span class="p">)</span>
+
+<span class="n">samples</span>  <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;locomo&quot;</span><span class="p">)</span>
+<span class="n">agent</span>    <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">NullMemory</span><span class="p">(),</span> <span class="n">llm</span><span class="o">=</span><span class="n">agent_llm</span><span class="p">)</span>
+<span class="n">results</span>  <span class="o">=</span> <span class="n">run_eval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">judge_scores</span> <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">judge_llm</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>  <span class="c1"># mode=&quot;auto&quot;</span>
+
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">judge_scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Overall  judge=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;overall&#39;</span><span class="p">][</span><span class="s1">&#39;judge_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;f1=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;overall&#39;</span><span class="p">][</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;rouge1=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;overall&#39;</span><span class="p">][</span><span class="s1">&#39;rouge1&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3>快速指标（跳过重量级模型）<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 不需要 himga[eval]，无 LLM 调用</span>
+<span class="n">fast_metrics</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;exact_match&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge2&quot;</span><span class="p">,</span> <span class="s2">&quot;rougeL&quot;</span><span class="p">,</span> <span class="s2">&quot;bleu1&quot;</span><span class="p">,</span> <span class="s2">&quot;meteor&quot;</span><span class="p">)</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">),</span> <span class="n">metrics</span><span class="o">=</span><span class="n">fast_metrics</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;overall&#39;</span><span class="p">][</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  ROUGE-1=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;overall&#39;</span><span class="p">][</span><span class="s1">&#39;rouge1&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="judge-api">
+<h3>judge 缓存节省 API 费用<a class="headerlink" href="#judge-api" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;outputs/lme_judge_cache.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># 第一次：调用 LLM，结果写入缓存</span>
+<span class="n">scores1</span> <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">judge_llm</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+
+<span class="c1"># 第二次（如修改了聚合逻辑）：从缓存读取，不调用 LLM</span>
+<span class="n">scores2</span> <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">judge_llm</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h3>离线重算指标<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuestionType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvalResult</span>
+
+<span class="c1"># 保存</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;outputs/results.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="n">asdict</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># 重建</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;outputs/results.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">EvalResult</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;question_type&quot;</span><span class="p">:</span> <span class="n">QuestionType</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;question_type&quot;</span><span class="p">])})</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raw</span>
+<span class="p">]</span>
+<span class="n">scores</span>  <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">judge_llm</span><span class="p">,</span> <span class="n">cache_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;outputs/cache.json&quot;</span><span class="p">))</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id12">
+<h2>9. 指标对齐说明<a class="headerlink" href="#id12" title="Link to this heading">#</a></h2>
+<section id="judge-score">
+<h3>Judge Score<a class="headerlink" href="#judge-score" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>数据集</p></th>
+<th class="head"><p>问题类型</p></th>
+<th class="head"><p>Judge 模式</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LoCoMo</p></td>
+<td><p>SINGLE_HOP / MULTI_HOP / TEMPORAL / OPEN_DOMAIN</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">continuous</span></code></p></td>
+<td><p>0.0–1.0 连续评分，对齐 MAGMA rubric</p></td>
+</tr>
+<tr class="row-odd"><td><p>LoCoMo</p></td>
+<td><p>ADVERSARIAL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">adversarial</span></code></p></td>
+<td><p>规则匹配，无 LLM 调用</p></td>
+</tr>
+<tr class="row-even"><td><p>LongMemEval</p></td>
+<td><p>TEMPORAL_REASONING</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">temporal_reasoning</span></code></p></td>
+<td><p>允许 ±1 日期误差</p></td>
+</tr>
+<tr class="row-odd"><td><p>LongMemEval</p></td>
+<td><p>KNOWLEDGE_UPDATE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">knowledge_update</span></code></p></td>
+<td><p>最新答案优先</p></td>
+</tr>
+<tr class="row-even"><td><p>LongMemEval</p></td>
+<td><p>SINGLE_SESSION_PREFERENCE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">preference</span></code></p></td>
+<td><p>Rubric 部分匹配</p></td>
+</tr>
+<tr class="row-odd"><td><p>LongMemEval</p></td>
+<td><p>其余类型</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default_binary</span></code></p></td>
+<td><p>通用二元判断</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="magma-table-1-table-2">
+<h3>与 MAGMA Table 1 / Table 2 的对应关系<a class="headerlink" href="#magma-table-1-table-2" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>MAGMA 列名</p></th>
+<th class="head"><p>HiMGA 对应字段</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Score (Judge)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metrics[&quot;overall&quot;][&quot;judge_score&quot;]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Score (F1)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metrics[&quot;overall&quot;][&quot;f1&quot;]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>各行（问题类型）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metrics[&quot;by_type&quot;][type_value]</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id13">
+<h2>10. 设计决策说明<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
+<section id="judge">
+<h3>为什么 judge 支持多模式而非统一二元？<a class="headerlink" href="#judge" title="Link to this heading">#</a></h3>
+<p>LoCoMo 和 LongMemEval 的评测协议不同：LoCoMo 用 0–1 连续分衡量语义相似度，LongMemEval 用二元 yes/no 并针对不同题型有专用 prompt（如允许 off-by-one 的 temporal_reasoning、优先最新答案的 knowledge_update）。统一模式会降低对齐精度，<code class="docutils literal notranslate"><span class="pre">mode=&quot;auto&quot;</span></code> 让调用方无需关心细节。</p>
+</section>
+<section id="bert-f1-sbert-similarity-extra">
+<h3>为什么 <code class="docutils literal notranslate"><span class="pre">bert_f1</span></code> 和 <code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code> 是可选 extra？<a class="headerlink" href="#bert-f1-sbert-similarity-extra" title="Link to this heading">#</a></h3>
+<p>两者分别需要 ~1.3 GB 和 ~80 MB 的预训练模型，下载时间长、不适合所有环境。将其设为 <code class="docutils literal notranslate"><span class="pre">[eval]</span></code> extras 使核心安装保持轻量。未安装时调用会立即抛出带安装指引的 <code class="docutils literal notranslate"><span class="pre">ImportError</span></code>，而非静默返回 0.0（避免误解结果）。</p>
+</section>
+<section id="compute-metrics-metrics">
+<h3>为什么 <code class="docutils literal notranslate"><span class="pre">compute_metrics</span></code> 有 <code class="docutils literal notranslate"><span class="pre">metrics</span></code> 参数？<a class="headerlink" href="#compute-metrics-metrics" title="Link to this heading">#</a></h3>
+<p>开发和测试阶段通常不需要 BERTScore / SBERT，但默认加载会拖慢测试速度。<code class="docutils literal notranslate"><span class="pre">metrics</span></code> 参数允许按需计算，<code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.slow</span></code> 测试才触发重量级模型。</p>
+</section>
+<section id="runner-judge">
+<h3>为什么 runner 不内嵌 judge？<a class="headerlink" href="#runner-judge" title="Link to this heading">#</a></h3>
+<p>Judge 有网络延迟、API 费用、结果可缓存复用。分离后修改指标聚合逻辑不需要重跑 judge；重跑 runner 也不需要重新缓存 judge 结果。</p>
+</section>
+<section id="judge-question-id">
+<h3>为什么 judge 缓存以 <code class="docutils literal notranslate"><span class="pre">question_id</span></code> 为键？<a class="headerlink" href="#judge-question-id" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">question_id</span></code> 在同一数据集内唯一，新增样本时可增量更新缓存，不需要失效全部旧缓存。</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="data.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">himga.data</span></code> — API 设计与使用说明</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../datasets/locomo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LoCoMo 数据集说明</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 概述</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 模块结构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 安装</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4. 类型参考</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evalresult"><code class="docutils literal notranslate"><span class="pre">EvalResult</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">5. 函数参考</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-eval-runner-py">5.1 <code class="docutils literal notranslate"><span class="pre">run_eval</span></code>（runner.py）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#is-unanswerable-judge-py">5.2 <code class="docutils literal notranslate"><span class="pre">is_unanswerable</span></code>（judge.py）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#judge-answer-judge-py">5.3 <code class="docutils literal notranslate"><span class="pre">judge_answer</span></code>（judge.py）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-judge-judge-py">5.4 <code class="docutils literal notranslate"><span class="pre">batch_judge</span></code>（judge.py）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-metrics-metrics-py">5.5 <code class="docutils literal notranslate"><span class="pre">compute_metrics</span></code>（metrics.py）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. 指标一览</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">7. 评测流水线</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">8. 使用示例</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#locomo">完整评测流水线（LoCoMo）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">快速指标（跳过重量级模型）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#judge-api">judge 缓存节省 API 费用</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">离线重算指标</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">9. 指标对齐说明</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#judge-score">Judge Score</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#magma-table-1-table-2">与 MAGMA Table 1 / Table 2 的对应关系</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">10. 设计决策说明</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#judge">为什么 judge 支持多模式而非统一二元？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bert-f1-sbert-similarity-extra">为什么 <code class="docutils literal notranslate"><span class="pre">bert_f1</span></code> 和 <code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code> 是可选 extra？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-metrics-metrics">为什么 <code class="docutils literal notranslate"><span class="pre">compute_metrics</span></code> 有 <code class="docutils literal notranslate"><span class="pre">metrics</span></code> 参数？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runner-judge">为什么 runner 不内嵌 judge？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#judge-question-id">为什么 judge 缓存以 <code class="docutils literal notranslate"><span class="pre">question_id</span></code> 为键？</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, colehank.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

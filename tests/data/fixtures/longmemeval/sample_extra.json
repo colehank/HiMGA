@@ -1,0 +1,18 @@
+[
+  {
+    "question_id": "q_extra_001",
+    "question_type": "single-session-user",
+    "question": "What city does the user live in?",
+    "question_date": "2024/04/01 (Mon) 08:00",
+    "answer": "Boston",
+    "answer_session_ids": ["sess_extra_1"],
+    "haystack_dates": ["2024/04/01 (Mon) 08:00"],
+    "haystack_session_ids": ["sess_extra_1"],
+    "haystack_sessions": [
+      [
+        {"role": "user",      "content": "I just moved to Boston last month."},
+        {"role": "assistant", "content": "Boston is a great city!"}
+      ]
+    ]
+  }
+]

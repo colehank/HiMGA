@@ -1,0 +1,1347 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>HiMGA：RAG基座使用指南 &#8212; HiMGA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=e74c79bf"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/staging';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="himga.agent — API 设计与使用说明" href="../module/agent.html" />
+    <link rel="prev" title="HiMGA" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">HiMGA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../module/eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    HiMGA：RAG基座使用指南
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/agent.html">
+    himga.agent — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/memory.html">
+    himga.memory — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/llm.html">
+    himga.llm — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/data.html">
+    himga.data — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../module/eval.html">
+    himga.eval — API 设计与使用说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/locomo.html">
+    LoCoMo 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../datasets/longmemeval.html">
+    LongMemEval 数据集说明
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/progress.html">
+    HiMGA 基座平台开发进度
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/agent.html">
+    agent 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/memory.html">
+    memory 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/llm.html">
+    llm 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/data.html">
+    data 模块设计
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/staging/eval.html">
+    eval 模块设计
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/colehank/HiMGA" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">HiMGA：RAG基座使用指南</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="himga-rag">
+<h1>HiMGA：RAG基座使用指南<a class="headerlink" href="#himga-rag" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>路径：<code class="docutils literal notranslate"><span class="pre">docs/usage/staging.md</span></code></p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#rag">构建 RAG 需要哪些环节</a></p></li>
+<li><p><a class="reference internal" href="#id2">HiMGA 如何实现 RAG 基座</a></p></li>
+<li><p><a class="reference internal" href="#himga">用 HiMGA 跑一个完整评测</a></p></li>
+<li><p><a class="reference internal" href="#id5">评测指标详解</a></p></li>
+<li><p><a class="reference internal" href="#id9">实现你自己的 RAG 记忆系统</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="rag">
+<h2>1. 构建 RAG 需要哪些环节<a class="headerlink" href="#rag" title="Link to this heading">#</a></h2>
+<p>一个完整的对话记忆 RAG 系统由四个环节组成：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>环节</p></th>
+<th class="head"><p>做什么</p></th>
+<th class="head"><p>关键挑战</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>① 数据</strong></p></td>
+<td><p>原始对话记录，结构化为可处理的格式</p></td>
+<td><p>两个数据集格式不一，日期表示各异</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>② 存入（Ingestion）</strong></p></td>
+<td><p>把对话逐条写入记忆库</p></td>
+<td><p>如何组织、压缩、建索引</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>③ 检索（Retrieval）</strong></p></td>
+<td><p>根据问题找出最相关的记忆片段</p></td>
+<td><p>语义相关性、时序关系、跨会话推理</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>④ 生成（Generation）</strong></p></td>
+<td><p>把问题和检索结果拼成 prompt，调用 LLM</p></td>
+<td><p>prompt 设计、答案格式</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>HiMGA 的核心研究目标就在 <strong>环节②③</strong>：用层次化多图结构（Hierarchical Multi-Graph）实现更好的记忆存储和检索。</p>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>2. HiMGA 如何实现 RAG 基座<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>HiMGA 将四个环节分别封装为独立模块，各模块职责单一，可以单独替换。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>himga.data    ──→  himga.memory  ──→  himga.llm
+  （数据）          （存入 + 检索）      （生成）
+     └──────────────────┴──────────────────┘
+                        │
+                   himga.agent
+                  （流程编排器）
+                        │
+                   himga.eval
+                  （结果评测）
+</pre></div>
+</div>
+<section id="himga-data">
+<h3>2.1 <code class="docutils literal notranslate"><span class="pre">himga.data</span></code> — 对话数据<a class="headerlink" href="#himga-data" title="Link to this heading">#</a></h3>
+<p><strong>对应环节①</strong></p>
+<p>负责把两个基准数据集（LoCoMo、LongMemEval）解析为统一的数据结构，屏蔽原始格式差异。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">Sample</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">Message</span><span class="p">,</span> <span class="n">QAPair</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;locomo&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># 返回 list[Sample]</span>
+
+<span class="n">sample</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">sample_id</span><span class="p">)</span>           <span class="c1"># 样本 ID</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">sessions</span><span class="p">))</span>       <span class="c1"># 该样本共几轮对话 session</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>  <span class="c1"># 第一条消息内容</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">qa_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>             <span class="c1"># 第一个评测问题</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">qa_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>               <span class="c1"># 标准答案</span>
+</pre></div>
+</div>
+<p><strong>核心数据结构层级</strong>：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sample                         ← 一个完整评测单元（一组对话 + 所有问题）
+ ├── sessions: list[Session]   ← 按时间分段的对话
+ │    └── messages: list[Message]  ← 单条消息（role / content / date）
+ └── qa_pairs: list[QAPair]    ← 需要回答的问题集
+      ├── question              ← 问题文本
+      ├── answer                ← 标准答案
+      └── question_type         ← 问题类型（影响评测方式）
+</pre></div>
+</div>
+</section>
+<section id="himga-memory">
+<h3>2.2 <code class="docutils literal notranslate"><span class="pre">himga.memory</span></code> — 记忆存储与检索<a class="headerlink" href="#himga-memory" title="Link to this heading">#</a></h3>
+<p><strong>对应环节②③，是 RAG 的核心</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">BaseMemory</span></code> 是所有记忆系统必须实现的抽象接口，只有三个方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseMemory</span><span class="p">,</span> <span class="n">NullMemory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Session</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseMemory</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;把一条消息存入记忆库（环节②）&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;根据问题检索相关记忆，返回拼好的上下文字符串（环节③）&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;清空记忆，每个评测样本开始前调用&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">NullMemory</span></code> 是内置的空实现——什么都不存，<code class="docutils literal notranslate"><span class="pre">retrieve</span></code> 永远返回 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>。它的作用是：</p>
+<ul class="simple">
+<li><p>作为<strong>基线（baseline）</strong>：纯 LLM 参数知识的上限/下限</p></li>
+<li><p>在开发初期<strong>打通评测流水线</strong>，无需等记忆系统完成</p></li>
+</ul>
+</section>
+<section id="himga-llm-llm">
+<h3>2.3 <code class="docutils literal notranslate"><span class="pre">himga.llm</span></code> — LLM 客户端<a class="headerlink" href="#himga-llm-llm" title="Link to this heading">#</a></h3>
+<p><strong>对应环节④</strong></p>
+<p>统一的 LLM 调用接口，隔离具体 API 实现：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_client</span><span class="p">,</span> <span class="n">AnthropicClient</span><span class="p">,</span> <span class="n">BaseLLMClient</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>  <span class="c1"># 从环境变量自动选择 provider</span>
+
+<span class="c1"># 或者直接指定</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">AnthropicClient</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-sonnet-4-6&quot;</span><span class="p">)</span>
+
+<span class="c1"># 统一的调用方式（OpenAI 消息格式）</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is RAG?&quot;</span><span class="p">}</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>扩展其他 LLM（如 OpenAI、本地模型）只需继承 <code class="docutils literal notranslate"><span class="pre">BaseLLMClient</span></code> 并实现 <code class="docutils literal notranslate"><span class="pre">chat()</span></code> 方法。</p>
+</section>
+<section id="himga-agent">
+<h3>2.4 <code class="docutils literal notranslate"><span class="pre">himga.agent</span></code> — 流程编排<a class="headerlink" href="#himga-agent" title="Link to this heading">#</a></h3>
+<p><strong>串联四个环节的胶水层</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">BaseAgent</span></code> 组合了 <code class="docutils literal notranslate"><span class="pre">memory</span></code> 和 <code class="docutils literal notranslate"><span class="pre">llm</span></code>，实现了完整的 RAG 流程：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAgent</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+
+<span class="c1"># 环节①②：把一个 Sample 的所有对话写入记忆</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">ingest_sample</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+
+<span class="c1"># 环节③④：检索 + 生成</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">answer</span><span class="p">(</span><span class="s2">&quot;When did Alice mention her new job?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">answer()</span></code> 内部的流程：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>question
+   │
+   ▼
+memory.retrieve(question)   ← 环节③：检索
+   │
+   ▼
+[system prompt + context + question] → llm.chat()  ← 环节④：生成
+   │
+   ▼
+answer string
+</pre></div>
+</div>
+</section>
+<section id="himga-eval">
+<h3>2.5 <code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> — 评测框架<a class="headerlink" href="#himga-eval" title="Link to this heading">#</a></h3>
+<p>评测框架驱动整个评测循环，不感知记忆系统的内部实现：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_eval</span><span class="p">,</span> <span class="n">compute_metrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_judge</span>
+
+<span class="n">results</span>      <span class="o">=</span> <span class="n">run_eval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>        <span class="c1"># 跑预测</span>
+<span class="n">judge_scores</span> <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>   <span class="c1"># LLM 评分</span>
+<span class="n">metrics</span>      <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">judge_scores</span><span class="p">)</span>  <span class="c1"># 聚合指标</span>
+</pre></div>
+</div>
+<p>输出的 12 项指标按 <code class="docutils literal notranslate"><span class="pre">QuestionType</span></code> 分组，直接对应 MAGMA / LongMemEval 论文表格。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="himga">
+<h2>3. 用 HiMGA 跑一个完整评测<a class="headerlink" href="#himga" title="Link to this heading">#</a></h2>
+<p>以下是用 <code class="docutils literal notranslate"><span class="pre">NullMemory</span></code>（基线）跑通完整流水线的最小示例。</p>
+<section id="id3">
+<h3>3.1 环境准备<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>himga<span class="w">            </span><span class="c1"># 核心安装</span>
+<span class="c1"># 若需要 BERTScore / SBERT：pip install &quot;himga[eval]&quot;</span>
+</pre></div>
+</div>
+<p>在项目根目录创建 <code class="docutils literal notranslate"><span class="pre">.env</span></code>（从 <code class="docutils literal notranslate"><span class="pre">.env_example</span></code> 复制）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ANTHROPIC_API_KEY</span><span class="o">=</span><span class="n">sk</span><span class="o">-</span><span class="n">ant</span><span class="o">-...</span>
+<span class="n">DATASETS_ROOT</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">/</span><span class="n">datasets</span>   <span class="c1"># 可选，默认 .cache/datasets</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>3.2 完整代码<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_metrics</span><span class="p">,</span> <span class="n">run_eval</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_judge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">NullMemory</span>
+
+<span class="c1"># ── 1. 初始化组件 ───────────────────────────────────────────────</span>
+<span class="n">llm</span>    <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>
+<span class="n">memory</span> <span class="o">=</span> <span class="n">NullMemory</span><span class="p">()</span>
+<span class="n">agent</span>  <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+
+<span class="c1"># ── 2. 加载数据 ─────────────────────────────────────────────────</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;locomo&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>   <span class="c1"># 先用 10 条快速验证</span>
+
+<span class="c1"># ── 3. 跑预测 ───────────────────────────────────────────────────</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">run_eval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;总计 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条 QA 预测完成&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 4. LLM 评分（支持缓存，重跑不重复计费）─────────────────────</span>
+<span class="n">judge_scores</span> <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">,</span>
+    <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>                                      <span class="c1"># 按题型自动选择评分模式</span>
+    <span class="n">cache_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;outputs/locomo_judge.json&quot;</span><span class="p">),</span>     <span class="c1"># 结果缓存</span>
+<span class="p">)</span>
+
+<span class="c1"># ── 5. 计算并打印指标 ────────────────────────────────────────────</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">,</span>
+    <span class="n">judge_scores</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;judge_score&quot;</span><span class="p">,</span> <span class="s2">&quot;exact_match&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge1&quot;</span><span class="p">),</span>  <span class="c1"># 只算需要的</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;指标&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;得分&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">25</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">&gt;8.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">── 按问题类型 ──&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">qtype</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;by_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">qtype</span><span class="si">:</span><span class="s2">&lt;30</span><span class="si">}</span><span class="s2"> judge=</span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;judge_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  n=</span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="nullmemory">
+<h3>3.3 预期输出（NullMemory 基线，数值因模型而异）<a class="headerlink" href="#nullmemory" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>总计 247 条 QA 预测完成
+
+指标              得分
+-------------------------
+judge_score      0.087
+exact_match      0.012
+f1               0.065
+rouge1           0.071
+
+── 按问题类型 ──
+adversarial                    judge=0.400  n=50
+multi_hop                      judge=0.040  n=60
+open_domain                    judge=0.120  n=37
+single_hop                     judge=0.080  n=75
+temporal                       judge=0.060  n=25
+</pre></div>
+</div>
+<p>NullMemory 下分数很低是正常的——它不存任何记忆，LLM 只能靠参数知识猜。这正是基线的价值：<strong>你的记忆系统要超过这个数才算有效果</strong>。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>4. 评测指标详解<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>HiMGA 内置 12 项指标，分为四类。每类侧重不同维度，综合使用才能全面衡量记忆系统的质量。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_metrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">ALL_METRICS</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_METRICS</span><span class="p">)</span>
+<span class="c1"># (&#39;judge_score&#39;, &#39;exact_match&#39;, &#39;f1&#39;, &#39;rouge1&#39;, &#39;rouge2&#39;, &#39;rougeL&#39;,</span>
+<span class="c1">#  &#39;bleu1&#39;, &#39;bleu2&#39;, &#39;bleu4&#39;, &#39;meteor&#39;, &#39;bert_f1&#39;, &#39;sbert_similarity&#39;)</span>
+</pre></div>
+</div>
+<p>按需选择计算哪些指标（跳过重量级模型加速开发）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">judge_scores</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;judge_score&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge1&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<section id="llm-as-a-judge">
+<h3>4.1 LLM-as-a-Judge 类<a class="headerlink" href="#llm-as-a-judge" title="Link to this heading">#</a></h3>
+<section id="judge-score">
+<h4><code class="docutils literal notranslate"><span class="pre">judge_score</span></code><a class="headerlink" href="#judge-score" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：让 LLM 扮演评卷老师，对模型答��打分。</p>
+<p><strong>为什么需要它</strong>：字面匹配指标（F1、ROUGE）只看词汇重叠，无法判断语义等价。”May 7th” 和 “7 May 2023” 字面不同但含义相同，只有 judge 能正确给满分。</p>
+<p><strong>两种打分模式</strong>（根据题目类型自动切换）：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>数据集</p></th>
+<th class="head"><p>题目类型</p></th>
+<th class="head"><p>模式</p></th>
+<th class="head"><p>返回值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LoCoMo</p></td>
+<td><p>SINGLE_HOP / MULTI_HOP / TEMPORAL / OPEN_DOMAIN</p></td>
+<td><p>连续评分</p></td>
+<td><p>0.0 – 1.0（六档量表）</p></td>
+</tr>
+<tr class="row-odd"><td><p>LoCoMo</p></td>
+<td><p>ADVERSARIAL</p></td>
+<td><p>规则匹配</p></td>
+<td><p>0.0 或 1.0（无 LLM 调用）</p></td>
+</tr>
+<tr class="row-even"><td><p>LongMemEval</p></td>
+<td><p>各类型</p></td>
+<td><p>二元判断</p></td>
+<td><p>0.0（no）或 1.0（yes）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>优点</strong>：最接近人类判断，对格式变体、同义表达宽容。<br />
+<strong>缺点</strong>：有 API 费用，但支持缓存（重跑不重复计费）。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h3>4.2 基于词汇匹配的指标<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>这类指标不调用任何模型，速度极快，适合开发阶段快速迭代。</p>
+<section id="exact-match">
+<h4><code class="docutils literal notranslate"><span class="pre">exact_match</span></code><a class="headerlink" href="#exact-match" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：大小写不敏感的完全相等判断，返回 0.0 或 1.0。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>预测 &quot;7 May 2023&quot;  vs 标准 &quot;7 May 2023&quot;  → 1.0
+预测 &quot;7 may 2023&quot;  vs 标准 &quot;7 May 2023&quot;  → 1.0（大小写不敏感）
+预测 &quot;May 7, 2023&quot; vs 标准 &quot;7 May 2023&quot;  → 0.0（格式不同）
+</pre></div>
+</div>
+<p><strong>适用场景</strong>：答案格式高度统一的封闭域问题（如数字、日期、专有名词）。<br />
+<strong>不适用</strong>：开放域问题，稍有格式差异就得零分。</p>
+</section>
+<hr class="docutils" />
+<section id="f1-token-level-f1">
+<h4><code class="docutils literal notranslate"><span class="pre">f1</span></code>（Token-level F1）<a class="headerlink" href="#f1-token-level-f1" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：把预测和标准答案都拆成词（token），计算词袋级别的 F1 分数，对齐 SQuAD 评测标准。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>预测 &quot;Caroline went to the support group in May&quot;
+答案 &quot;7 May 2023&quot;
+
+交集词：{&quot;may&quot;}  → precision = 1/8, recall = 1/3
+F1 = 2 × (1/8) × (1/3) / (1/8 + 1/3) ≈ 0.22
+</pre></div>
+</div>
+<p><strong>特点</strong>：</p>
+<ul class="simple">
+<li><p>标点替换为空格，全部小写后再分词</p></li>
+<li><p>允许部分匹配，比 exact_match 更宽容</p></li>
+<li><p>对词序不敏感（只看词汇重叠，不看顺序）</p></li>
+</ul>
+<p><strong>适用场景</strong>：答案中有关键实体词的问题，能奖励部分正确。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="n-gram">
+<h3>4.3 基于 N-gram 的指标<a class="headerlink" href="#n-gram" title="Link to this heading">#</a></h3>
+<section id="rouge1-rouge2-rougel">
+<h4><code class="docutils literal notranslate"><span class="pre">rouge1</span></code> / <code class="docutils literal notranslate"><span class="pre">rouge2</span></code> / <code class="docutils literal notranslate"><span class="pre">rougeL</span></code><a class="headerlink" href="#rouge1-rouge2-rougel" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：ROUGE（Recall-Oriented Understudy for Gisting Evaluation）系列，原本用于摘要评测，这里计算 F1（而非只计算召回率）。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>衡量什么</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rouge1</span></code></p></td>
+<td><p>单词（unigram）重叠</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rouge2</span></code></p></td>
+<td><p>相邻两词（bigram）重叠，对连续短语更敏感</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rougeL</span></code></p></td>
+<td><p>最长公共子序列，同时考虑词序</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>预测 &quot;The meeting was on Monday morning&quot;
+答案 &quot;The meeting happened Monday&quot;
+
+rouge1: 词汇重叠多 → 较高
+rouge2: &quot;The meeting&quot; 重叠 → 中等
+rougeL: 最长公共子序列 &quot;The meeting Monday&quot; → 中等
+</pre></div>
+</div>
+<p><strong>适用场景</strong>：答案较长、有叙述性内容时，比 F1 更细腻。<br />
+<strong>注意</strong>：<code class="docutils literal notranslate"><span class="pre">rougeL</span></code> 比 <code class="docutils literal notranslate"><span class="pre">rouge1</span></code> 更严格，更接近人类对流畅度的感知。</p>
+</section>
+<hr class="docutils" />
+<section id="bleu1-bleu2-bleu4">
+<h4><code class="docutils literal notranslate"><span class="pre">bleu1</span></code> / <code class="docutils literal notranslate"><span class="pre">bleu2</span></code> / <code class="docutils literal notranslate"><span class="pre">bleu4</span></code><a class="headerlink" href="#bleu1-bleu2-bleu4" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：BLEU（Bilingual Evaluation Understudy）系列，原本用于机器翻译，衡量预测中有多大比例的 n-gram 出现在标准答案中（precision 导向），配合 SmoothingFunction 避免零分。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>衡量什么</p></th>
+<th class="head"><p>特点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bleu1</span></code></p></td>
+<td><p>单词精准率</p></td>
+<td><p>宽松</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bleu2</span></code></p></td>
+<td><p>1-gram + 2-gram 几何平均</p></td>
+<td><p>中等</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bleu4</span></code></p></td>
+<td><p>1-gram 到 4-gram 几何平均</p></td>
+<td><p>严格，短答案易得低分</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>与 ROUGE 的区别</strong>：ROUGE 关注召回（答案的词有没有出现在预测里），BLEU 关注精准（预测的词有没有出现在答案里）。两者结合更全面。</p>
+<p><strong>适用场景</strong>：对生成质量要求较高时参考，但对话记忆场景中 BLEU-4 通常偏低（答案短、词汇受限）。</p>
+</section>
+<hr class="docutils" />
+<section id="meteor">
+<h4><code class="docutils literal notranslate"><span class="pre">meteor</span></code><a class="headerlink" href="#meteor" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：METEOR（Metric for Evaluation of Translation with Explicit ORdering），在 BLEU 基础上增加了词形还原（stemming）和同义词匹配（WordNet），同时兼顾精准率和召回率，并对词序有一定惩罚。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>预测 &quot;she attended the meeting&quot;
+答案 &quot;she went to the meeting&quot;
+
+BLEU：无 bigram 重叠 → 低分
+METEOR：WordNet 知道 &quot;attended&quot; ≈ &quot;went&quot; → 较高分
+</pre></div>
+</div>
+<p><strong>优点</strong>：比 BLEU 和 ROUGE 更接近人类判断，对同义词友好。<br />
+<strong>依赖</strong>：首次运行自动下载 NLTK <code class="docutils literal notranslate"><span class="pre">wordnet</span></code> 语料（~10 MB）。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h3>4.4 基于神经网络的语义指标<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>这两项需要额外安装 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;himga[eval]&quot;</span></code>，首次运行会下载预训练模型。</p>
+<section id="bert-f1-bertscore-f1">
+<h4><code class="docutils literal notranslate"><span class="pre">bert_f1</span></code>（BERTScore F1）<a class="headerlink" href="#bert-f1-bertscore-f1" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：用 RoBERTa-large（1.3 GB）把预测和答案都编码成上下文向量，在词元级别计算余弦相似度，再聚合为 Precision / Recall / F1。</p>
+<p><strong>优点</strong>：能捕捉语义等价（”went” ≈ “traveled”），不依赖字面匹配。<br />
+<strong>已知问题</strong>：两段不相关但都是流畅英文的文本，BERTScore 会虚高（通常在 0.75–0.90），需结合 judge_score 解读。典型案例：答案是短日期，预测是长段拒绝回答，bert_f1 仍可达 0.78。</p>
+<p><strong>适用场景</strong>：答案较长、有语义改写时比 ROUGE/BLEU 更可靠；但不适合单独作为判断标准。</p>
+</section>
+<hr class="docutils" />
+<section id="sbert-similarity-sentence-bert">
+<h4><code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code>（Sentence-BERT 余弦相似度）<a class="headerlink" href="#sbert-similarity-sentence-bert" title="Link to this heading">#</a></h4>
+<p><strong>本质</strong>：用 <code class="docutils literal notranslate"><span class="pre">all-MiniLM-L6-v2</span></code>（80 MB）把预测和答案分别编码为<strong>整句向量</strong>，计算余弦相似度，范围 [-1.0, 1.0]（实际通常在 [0.0, 1.0]）。</p>
+<p><strong>与 BERTScore 的区别</strong>：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>BERTScore</p></th>
+<th class="head"><p>SBERT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>粒度</p></td>
+<td><p>词元级别（token-level）</p></td>
+<td><p>句子级别（sentence-level）</p></td>
+</tr>
+<tr class="row-odd"><td><p>适用</p></td>
+<td><p>部分匹配、局部重叠</p></td>
+<td><p>整体语义是否一致</p></td>
+</tr>
+<tr class="row-even"><td><p>虚高风险</p></td>
+<td><p>较高</p></td>
+<td><p>较低（对整句语义更严格）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>适用场景</strong>：判断整体语义方向是否正确，对”答非所问”的惩罚更明显。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h3>4.5 指标选用建议<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>场景</p></th>
+<th class="head"><p>推荐指标</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>快速开发迭代（无 API 费用）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">f1</span></code> + <code class="docutils literal notranslate"><span class="pre">rouge1</span></code> + <code class="docutils literal notranslate"><span class="pre">meteor</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>对标论文结果</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">judge_score</span></code> + <code class="docutils literal notranslate"><span class="pre">f1</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>语义等价问题（同义词/格式变体）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">judge_score</span></code> + <code class="docutils literal notranslate"><span class="pre">meteor</span></code> + <code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>需要完整评测报告</p></td>
+<td><p>全部 12 项（<code class="docutils literal notranslate"><span class="pre">metrics=None</span></code>）</p></td>
+</tr>
+<tr class="row-even"><td><p>CI 自动化测试</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">exact_match</span></code> + <code class="docutils literal notranslate"><span class="pre">f1</span></code>（无外部依赖）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>一条经验规则</strong>：<code class="docutils literal notranslate"><span class="pre">judge_score</span></code> 是最接近论文结果的指标，其他指标用来辅助诊断——F1 低但 judge 高说明答案语义正确但措辞不同；F1 高但 judge 低说明词汇重叠是巧合。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>5. 实现你自己的 RAG 记忆系统<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>只需要做一件事：<strong>继承 <code class="docutils literal notranslate"><span class="pre">BaseMemory</span></code>，实现三个方法</strong>。评测流水线完全不需要改动。</p>
+<section id="id10">
+<h3>5.1 接口约定<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseMemory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Session</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyMemory</span><span class="p">(</span><span class="n">BaseMemory</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        每条消息都会调用一次。</span>
+<span class="sd">        可用字段：</span>
+<span class="sd">          message.role        — &quot;user&quot; 或 &quot;assistant&quot;</span>
+<span class="sd">          message.content     — 消息文本</span>
+<span class="sd">          message.date_str    — 原始日期字符串（可能为 None）</span>
+<span class="sd">          session.session_id  — 所属 session ID</span>
+<span class="sd">          session.date        — session 日期（datetime，可能为 None）</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        根据 query 返回拼好的上下文字符串，直接注入 prompt。</span>
+<span class="sd">        返回 &quot;&quot; 表示没有相关记忆。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;eval runner 在每个新 Sample 开始前调用，清空所有状态。&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h3>5.2 一个简单示例：全量拼接记忆<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<p>最简单的 RAG——把所有对话内容直接拼起来（不做检索，仅作示例）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseMemory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Session</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ConcatMemory</span><span class="p">(</span><span class="n">BaseMemory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;把所有消息拼成一个长字符串，retrieve 时整体返回（无检索）。&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">date_str</span><span class="si">}</span><span class="s2">] &quot;</span> <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">date_str</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">date</span><span class="si">}{</span><span class="n">message</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>5.3 接入评测，与基线对比<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">himga.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAgent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_metrics</span><span class="p">,</span> <span class="n">run_eval</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.eval.judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_judge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">himga.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">NullMemory</span>
+
+<span class="n">llm</span>     <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;locomo&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">fast_metrics</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;judge_score&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;rouge1&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 基线：NullMemory ────────────────────────────────────────────</span>
+<span class="n">baseline_agent</span>   <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">NullMemory</span><span class="p">(),</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+<span class="n">baseline_results</span> <span class="o">=</span> <span class="n">run_eval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">baseline_agent</span><span class="p">)</span>
+<span class="n">baseline_scores</span>  <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">baseline_results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+<span class="n">baseline_metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">baseline_results</span><span class="p">,</span> <span class="n">baseline_scores</span><span class="p">,</span>
+                                   <span class="n">metrics</span><span class="o">=</span><span class="n">fast_metrics</span><span class="p">)</span>
+
+<span class="c1"># ── 你的方法：MyMemory ──────────────────────────────────────────</span>
+<span class="n">my_agent</span>   <span class="o">=</span> <span class="n">BaseAgent</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">ConcatMemory</span><span class="p">(),</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+<span class="n">my_results</span> <span class="o">=</span> <span class="n">run_eval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">my_agent</span><span class="p">)</span>
+<span class="n">my_scores</span>  <span class="o">=</span> <span class="n">batch_judge</span><span class="p">(</span><span class="n">my_results</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+<span class="n">my_metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">my_results</span><span class="p">,</span> <span class="n">my_scores</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">fast_metrics</span><span class="p">)</span>
+
+<span class="c1"># ── 对比 ────────────────────────────────────────────────────────</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;指标&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;NullMemory&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;MyMemory&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;提升&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fast_metrics</span><span class="p">:</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">baseline_metrics</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">my_metrics</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">&gt;12.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">&gt;12.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">m</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="si">:</span><span class="s2">&gt;+8.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>5.4 下一步：实现真正的 RAG<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<p>实际的记忆系统在 <code class="docutils literal notranslate"><span class="pre">ingest</span></code> 和 <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> 里实现真正的向量检索或图结构：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>步骤</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">ingest</span></code> 里做什么</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">retrieve</span></code> 里做什么</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>向量检索</strong></p></td>
+<td><p>把消息 embed，存入向量数据库</p></td>
+<td><p>query embed 后做 top-k ANN 搜索，返回相关片段</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>图结构（MAGMA 风格）</strong></p></td>
+<td><p>建实体节点、会话节点、时序边</p></td>
+<td><p>图遍历找相关节点，组装上下文</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>HiMGA（本研究）</strong></p></td>
+<td><p>建层次化多图（utterance → session → topic）</p></td>
+<td><p>分层检索：先找相关 topic，再下钻到具体 turn</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>无论哪种方案，评测流水线（<code class="docutils literal notranslate"><span class="pre">run_eval</span></code> → <code class="docutils literal notranslate"><span class="pre">batch_judge</span></code> → <code class="docutils literal notranslate"><span class="pre">compute_metrics</span></code>）<strong>一行代码不用改</strong>。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id14">
+<h2>小结<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>你需要做的：实现 BaseMemory 的三个方法
+HiMGA 帮你做的：数据加载、Agent 编排、评测循环、12 项指标计算
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>你实现</p></th>
+<th class="head"><p>HiMGA 提供</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ingest()</span></code> — 存入策略</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">load_dataset()</span></code> — 统一数据格式</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">retrieve()</span></code> — 检索策略</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_eval()</span></code> — 评测循环</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reset()</span></code> — 状态清理</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">batch_judge()</span></code> + <code class="docutils literal notranslate"><span class="pre">compute_metrics()</span></code> — 评分与指标</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HiMGA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../module/agent.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">himga.agent</span></code> — API 设计与使用说明</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rag">1. 构建 RAG 需要哪些环节</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2. HiMGA 如何实现 RAG 基座</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga-data">2.1 <code class="docutils literal notranslate"><span class="pre">himga.data</span></code> — 对话数据</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga-memory">2.2 <code class="docutils literal notranslate"><span class="pre">himga.memory</span></code> — 记忆存储与检索</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga-llm-llm">2.3 <code class="docutils literal notranslate"><span class="pre">himga.llm</span></code> — LLM 客户端</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga-agent">2.4 <code class="docutils literal notranslate"><span class="pre">himga.agent</span></code> — 流程编排</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#himga-eval">2.5 <code class="docutils literal notranslate"><span class="pre">himga.eval</span></code> — 评测框架</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#himga">3. 用 HiMGA 跑一个完整评测</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">3.1 环境准备</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3.2 完整代码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nullmemory">3.3 预期输出（NullMemory 基线，数值因模型而异）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4. 评测指标详解</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm-as-a-judge">4.1 LLM-as-a-Judge 类</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#judge-score"><code class="docutils literal notranslate"><span class="pre">judge_score</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">4.2 基于词汇匹配的指标</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-match"><code class="docutils literal notranslate"><span class="pre">exact_match</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#f1-token-level-f1"><code class="docutils literal notranslate"><span class="pre">f1</span></code>（Token-level F1）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#n-gram">4.3 基于 N-gram 的指标</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rouge1-rouge2-rougel"><code class="docutils literal notranslate"><span class="pre">rouge1</span></code> / <code class="docutils literal notranslate"><span class="pre">rouge2</span></code> / <code class="docutils literal notranslate"><span class="pre">rougeL</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bleu1-bleu2-bleu4"><code class="docutils literal notranslate"><span class="pre">bleu1</span></code> / <code class="docutils literal notranslate"><span class="pre">bleu2</span></code> / <code class="docutils literal notranslate"><span class="pre">bleu4</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#meteor"><code class="docutils literal notranslate"><span class="pre">meteor</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">4.4 基于神经网络的语义指标</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bert-f1-bertscore-f1"><code class="docutils literal notranslate"><span class="pre">bert_f1</span></code>（BERTScore F1）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sbert-similarity-sentence-bert"><code class="docutils literal notranslate"><span class="pre">sbert_similarity</span></code>（Sentence-BERT 余弦相似度）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">4.5 指标选用建议</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">5. 实现你自己的 RAG 记忆系统</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">5.1 接口约定</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">5.2 一个简单示例：全量拼接记忆</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5.3 接入评测，与基线对比</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">5.4 下一步：实现真正的 RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, colehank.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
