@@ -113,6 +113,17 @@ def _make_eval_results(
     return results, scores
 
 
+def _compute_metrics_with_scores(
+    results: list[EvalResult],
+    scores: list[float],
+    **kwargs,
+) -> dict:
+    """Helper: call compute_metrics with pre-set judge scores via mock."""
+    with patch("himga.eval.judge.batch_judge", return_value=scores):
+        llm = MockLLMClient()
+        return compute_metrics(results, llm=llm, **kwargs)
+
+
 def _json_response(score: float) -> str:
     """Build a JSON judge response as returned by a continuous-mode LLM."""
     return json.dumps({"score": score, "reasoning": "test"})
@@ -793,22 +804,22 @@ class TestComputeMetrics:
 
     def test_returns_dict(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert isinstance(out, dict)
 
     def test_has_overall_key(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert "overall" in out
 
     def test_has_by_type_key(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert "by_type" in out
 
     def test_overall_has_all_base_metrics(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         for key in _FAST_METRICS:
             assert key in out["overall"], f"Missing key: {key}"
 
@@ -816,7 +827,7 @@ class TestComputeMetrics:
         results, scores = _make_eval_results(
             [(QuestionType.SINGLE_HOP, 1.0), (QuestionType.TEMPORAL, 0.0)]
         )
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert abs(out["overall"]["judge_score"] - 0.5) < 1e-9
 
     def test_overall_exact_match_correct(self):
@@ -838,20 +849,20 @@ class TestComputeMetrics:
                 prediction="London",
             ),
         ]
-        out = compute_metrics(results, [1.0, 0.0], metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, [1.0, 0.0], metrics=_FAST_METRICS)
         assert abs(out["overall"]["exact_match"] - 0.5) < 1e-9
 
     def test_by_type_contains_present_types(self):
         results, scores = _make_eval_results(
             [(QuestionType.SINGLE_HOP, 1.0), (QuestionType.TEMPORAL, 0.0)]
         )
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert "single_hop" in out["by_type"]
         assert "temporal" in out["by_type"]
 
     def test_by_type_entry_has_required_keys(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         entry = out["by_type"]["single_hop"]
         for key in ("judge_score", "exact_match", "f1", "count"):
             assert key in entry
@@ -864,7 +875,7 @@ class TestComputeMetrics:
                 (QuestionType.TEMPORAL, 1.0),
             ]
         )
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert out["by_type"]["single_hop"]["count"] == 2
         assert out["by_type"]["temporal"]["count"] == 1
 
@@ -876,7 +887,7 @@ class TestComputeMetrics:
                 (QuestionType.TEMPORAL, 1.0),
             ]
         )
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert abs(out["by_type"]["single_hop"]["judge_score"] - 0.5) < 1e-9
         assert abs(out["by_type"]["temporal"]["judge_score"] - 1.0) < 1e-9
 
@@ -891,7 +902,7 @@ class TestComputeMetrics:
                 prediction="Paris",
             )
         ]
-        out = compute_metrics(results, [1.0], metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, [1.0], metrics=_FAST_METRICS)
         assert abs(out["overall"]["f1"] - 1.0) < 1e-9
 
     def test_no_overlap_reduces_f1_to_0(self):
@@ -905,11 +916,11 @@ class TestComputeMetrics:
                 prediction="London",
             )
         ]
-        out = compute_metrics(results, [0.0], metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, [0.0], metrics=_FAST_METRICS)
         assert abs(out["overall"]["f1"] - 0.0) < 1e-9
 
     def test_empty_results_returns_zeros_with_fast_keys(self):
-        out = compute_metrics([], [], metrics=_FAST_METRICS)
+        out = compute_metrics([], metrics=_FAST_METRICS)
         assert out["overall"]["judge_score"] == 0.0
         assert out["overall"]["f1"] == 0.0
         assert out["overall"]["exact_match"] == 0.0
@@ -922,13 +933,13 @@ class TestComputeMetrics:
                 (QuestionType.KNOWLEDGE_UPDATE, 0.0),
             ]
         )
-        out = compute_metrics(results, scores, metrics=_FAST_METRICS)
+        out = _compute_metrics_with_scores(results, scores, metrics=_FAST_METRICS)
         assert "temporal_reasoning" in out["by_type"]
         assert "knowledge_update" in out["by_type"]
 
     def test_metrics_subset_only_returns_requested_keys(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 0.8)])
-        out = compute_metrics(results, scores, metrics=("judge_score", "f1"))
+        out = _compute_metrics_with_scores(results, scores, metrics=("judge_score", "f1"))
         assert set(out["overall"].keys()) == {"judge_score", "f1"}
 
     def test_all_metrics_constant_covers_all_names(self):
@@ -949,9 +960,10 @@ class TestComputeMetrics:
             patch("himga.eval.metrics._SBERT_AVAILABLE", True),
             patch("himga.eval.metrics._get_sbert_model", return_value=mock_model),
             patch("himga.eval.metrics._cos_sim", return_value=mock_sim),
+            patch("himga.eval.judge.batch_judge", return_value=[1.0]),
         ):
-            results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-            out = compute_metrics(results, scores)
+            results, _ = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
+            out = compute_metrics(results, llm=MockLLMClient())
         assert "bert_f1" in out["overall"]
         assert "sbert_similarity" in out["overall"]
         assert isinstance(out["overall"]["bert_f1"], float)

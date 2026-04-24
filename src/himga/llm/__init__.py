@@ -1,5 +1,5 @@
 """LLM module: abstract client interface and provider implementations."""
 
-from himga.llm.client import AnthropicClient, BaseLLMClient, get_client
+from himga.llm.client import AnthropicClient, BaseLLMClient, OpenAIClient, get_client
 
-__all__ = ["BaseLLMClient", "AnthropicClient", "get_client"]
+__all__ = ["BaseLLMClient", "AnthropicClient", "OpenAIClient", "get_client"]

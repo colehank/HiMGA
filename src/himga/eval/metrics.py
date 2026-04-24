@@ -15,11 +15,13 @@ For GPU acceleration install CUDA-compatible PyTorch **before** the extras::
 When running on a machine with CUDA-enabled PyTorch the BERTScore and
 Sentence-BERT functions automatically use the GPU; no code changes are needed.
 """
+# NOTE: judge_score is computed lazily inside compute_metrics when requested.
 
 from __future__ import annotations
 
 import threading
 from collections import defaultdict
+from pathlib import Path
 
 import nltk
 from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
@@ -27,6 +29,7 @@ from nltk.translate.meteor_score import meteor_score as _meteor_score
 from rouge_score import rouge_scorer as _rouge_scorer_mod
 
 from himga.eval.runner import EvalResult
+from himga.llm.client import BaseLLMClient
 
 # ---------------------------------------------------------------------------
 # NLTK corpus bootstrap — called lazily before first BLEU / METEOR use
@@ -461,16 +464,16 @@ ALL_METRICS: tuple[str, ...] = (
 def _compute_selected_metrics(
     prediction: str,
     ground_truth: str,
-    judge_score: float,
     include: frozenset[str],
     *,
+    judge_score: float | None = None,
     precomputed_bert: float | None = None,
     precomputed_sbert: float | None = None,
 ) -> dict[str, float]:
     """Compute only the metrics listed in *include* for a single prediction."""
     result: dict[str, float] = {}
     if "judge_score" in include:
-        result["judge_score"] = judge_score
+        result["judge_score"] = judge_score if judge_score is not None else 0.0
     if "exact_match" in include:
         result["exact_match"] = exact_match(prediction, ground_truth)
     if "f1" in include:
@@ -502,14 +505,18 @@ def _compute_selected_metrics(
 
 def compute_metrics(
     results: list[EvalResult],
-    judge_scores: list[float],
     *,
     metrics: tuple[str, ...] | list[str] | None = None,
+    llm: BaseLLMClient | None = None,
+    cache_path: Path | None = None,
 ) -> dict:
     """Aggregate metrics overall and per :class:`~himga.data.schema.QuestionType`.
 
     By default all twelve metrics are computed.  Pass *metrics* to request a
     subset (useful to avoid loading heavy ML models during fast test runs).
+
+    If ``"judge_score"`` is in *metrics* (or *metrics* is ``None``), *llm* must
+    be provided; :func:`~himga.eval.judge.batch_judge` is called internally.
 
     Available metrics (all in ``[0.0, 1.0]``):
 
@@ -526,11 +533,14 @@ def compute_metrics(
     ----------
     results : list[EvalResult]
         Evaluation predictions.
-    judge_scores : list[float]
-        Parallel judge scores produced by :func:`~himga.eval.judge.batch_judge`.
     metrics : tuple or list or None
         Subset of metric names to compute.  ``None`` (default) computes all.
         Example: ``metrics=("judge_score", "f1", "rouge1")``
+    llm : BaseLLMClient or None
+        Judge LLM client.  Required when ``"judge_score"`` is in *metrics*.
+    cache_path : Path or None
+        Optional JSON file path for caching judge scores; forwarded to
+        :func:`~himga.eval.judge.batch_judge`.
 
     Returns
     -------
@@ -547,6 +557,8 @@ def compute_metrics(
 
     Raises
     ------
+    ValueError
+        If ``"judge_score"`` is requested but *llm* is ``None``.
     ImportError
         If ``bert_f1`` or ``sbert_similarity`` are requested but the
         ``himga[eval]`` extras are not installed.
@@ -555,6 +567,15 @@ def compute_metrics(
     _zero_overall: dict[str, float] = {k: 0.0 for k in ALL_METRICS if k in include}
     if not results:
         return {"overall": _zero_overall, "by_type": {}}
+
+    # Compute judge scores if requested.
+    judge_scores: list[float] | None = None
+    if "judge_score" in include:
+        from himga.eval.judge import batch_judge
+
+        if llm is None:
+            raise ValueError("llm is required when 'judge_score' is in metrics")
+        judge_scores = batch_judge(results, llm=llm, cache_path=cache_path)
 
     # Pre-compute batch metrics to avoid repeated model loads.
     predictions = [r.prediction for r in results]
@@ -570,12 +591,12 @@ def compute_metrics(
         _compute_selected_metrics(
             r.prediction,
             r.ground_truth,
-            js,
             include,
+            judge_score=judge_scores[i] if judge_scores is not None else None,
             precomputed_bert=batch_bert[i] if batch_bert is not None else None,
             precomputed_sbert=batch_sbert[i] if batch_sbert is not None else None,
         )
-        for i, (r, js) in enumerate(zip(results, judge_scores))
+        for i, r in enumerate(results)
     ]
 
     active_keys = list(per_result[0].keys())

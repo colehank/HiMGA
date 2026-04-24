@@ -144,7 +144,7 @@ class TestGetClient:
         assert isinstance(client, AnthropicClient)
 
     def test_env_var_unknown_raises(self, monkeypatch):
-        monkeypatch.setenv("LLM_PROVIDER", "openai")
+        monkeypatch.setenv("LLM_PROVIDER", "gemini")
         with pytest.raises(ValueError, match="Unknown provider"):
             get_client()
 
@@ -278,3 +278,123 @@ class TestAnthropicClientChat:
         call_kwargs = mock_create.call_args.kwargs
         assert call_kwargs["system"] == "You are helpful."
         assert all(m["role"] != "system" for m in call_kwargs["messages"])
+
+
+# ---------------------------------------------------------------------------
+# TestOpenAIClientUnit
+# ---------------------------------------------------------------------------
+
+
+class TestOpenAIClientUnit:
+    """Unit tests for OpenAIClient — no real API calls."""
+
+    def test_is_base_llm_client_instance(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI"):
+            client = OpenAIClient()
+        assert isinstance(client, BaseLLMClient)
+
+    def test_default_model_is_gpt4o_mini(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI"):
+            client = OpenAIClient()
+        assert client._default_model == "gpt-4o-mini"
+
+    def test_custom_model_stored(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI"):
+            client = OpenAIClient(model="gpt-4o")
+        assert client._default_model == "gpt-4o"
+
+    def test_base_url_forwarded(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI") as mock_sdk:
+            OpenAIClient(base_url="http://localhost:11434/v1")
+        _, kwargs = mock_sdk.call_args
+        assert kwargs.get("base_url") == "http://localhost:11434/v1"
+
+    def test_chat_returns_content(self):
+        from himga.llm.client import OpenAIClient
+
+        mock_msg = MagicMock()
+        mock_msg.content = "hello"
+        mock_choice = MagicMock()
+        mock_choice.message = mock_msg
+        mock_resp = MagicMock()
+        mock_resp.choices = [mock_choice]
+
+        with patch("openai.OpenAI") as mock_sdk:
+            client = OpenAIClient()
+            mock_sdk.return_value.chat.completions.create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            result = client.chat([{"role": "user", "content": "hi"}])
+        assert result == "hello"
+
+    def test_chat_passes_messages_unchanged(self):
+        from himga.llm.client import OpenAIClient
+
+        mock_msg = MagicMock()
+        mock_msg.content = "ok"
+        mock_resp = MagicMock()
+        mock_resp.choices = [MagicMock(message=mock_msg)]
+
+        with patch("openai.OpenAI") as mock_sdk:
+            client = OpenAIClient()
+            mock_create = mock_sdk.return_value.chat.completions.create
+            mock_create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            msgs = [
+                {"role": "system", "content": "sys"},
+                {"role": "user", "content": "q"},
+            ]
+            client.chat(msgs)
+        assert mock_create.call_args.kwargs["messages"] == msgs
+
+    def test_chat_none_content_returns_empty_string(self):
+        from himga.llm.client import OpenAIClient
+
+        mock_msg = MagicMock()
+        mock_msg.content = None
+        mock_resp = MagicMock()
+        mock_resp.choices = [MagicMock(message=mock_msg)]
+
+        with patch("openai.OpenAI") as mock_sdk:
+            client = OpenAIClient()
+            mock_sdk.return_value.chat.completions.create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            result = client.chat([{"role": "user", "content": "hi"}])
+        assert result == ""
+
+
+# ---------------------------------------------------------------------------
+# TestGetClientOpenAI
+# ---------------------------------------------------------------------------
+
+
+class TestGetClientOpenAI:
+    def test_openai_provider_returns_openai_client(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI"):
+            client = get_client("openai")
+        assert isinstance(client, OpenAIClient)
+
+    def test_env_var_openai_returns_openai_client(self, monkeypatch):
+        from himga.llm.client import OpenAIClient
+
+        monkeypatch.setenv("LLM_PROVIDER", "openai")
+        with patch("openai.OpenAI"):
+            client = get_client()
+        assert isinstance(client, OpenAIClient)
+
+    def test_get_client_forwards_model_kwarg(self):
+        from himga.llm.client import OpenAIClient
+
+        with patch("openai.OpenAI"):
+            client = get_client("openai", model="gpt-4o")
+        assert isinstance(client, OpenAIClient)
+        assert client._default_model == "gpt-4o"

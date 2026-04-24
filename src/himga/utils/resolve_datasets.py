@@ -13,7 +13,10 @@ from loguru import logger
 from ..logger import setup_logger
 
 setup_logger()
-load_dotenv()
+# Load project-level .env first (repo root), then fall back to any .env in parent dirs.
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+load_dotenv(_PROJECT_ROOT / ".env", override=False)
+load_dotenv(override=False)  # fallback: walk up from cwd
 
 ROOT = Path(os.getenv("DATASETS_ROOT", ".cache/datasets"))
 GH_HEADERS = {"Authorization": f"token {t}"} if (t := os.getenv("GITHUB_TOKEN")) else {}
