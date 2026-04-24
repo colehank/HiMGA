@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import tempfile
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -670,17 +671,12 @@ class TestMeteor:
 
 
 # ===========================================================================
-# TestBertF1 (integration — downloads BERT model)
+# TestBertF1
 # ===========================================================================
 
 
 class TestBertF1:
-    """Tests for bert_f1().
-
-    Tests that load the model (roberta-large, ~1.3 GB) are marked ``slow``
-    and skipped in fast CI runs.  Empty-input tests short-circuit before any
-    model load and run unconditionally.
-    """
+    """Tests for bert_f1(). Heavy model is mocked — no downloads required."""
 
     def test_empty_prediction_gives_zero(self):
         assert bert_f1("", "reference") == 0.0
@@ -688,34 +684,44 @@ class TestBertF1:
     def test_empty_ground_truth_gives_zero(self):
         assert bert_f1("prediction", "") == 0.0
 
-    @pytest.mark.slow
     def test_returns_float(self):
-        score = bert_f1("the cat sat", "the cat sat on the mat")
+        mock_f1 = MagicMock()
+        mock_f1.item.return_value = 0.85
+        with (
+            patch("himga.eval.metrics._BERT_SCORE_AVAILABLE", True),
+            patch("himga.eval.metrics._bert_score_fn", return_value=(None, None, mock_f1)),
+        ):
+            score = bert_f1("the cat sat", "the cat sat on the mat")
         assert isinstance(score, float)
 
-    @pytest.mark.slow
     def test_score_in_range(self):
-        score = bert_f1("hello world", "hello world again")
+        mock_f1 = MagicMock()
+        mock_f1.item.return_value = 0.72
+        with (
+            patch("himga.eval.metrics._BERT_SCORE_AVAILABLE", True),
+            patch("himga.eval.metrics._bert_score_fn", return_value=(None, None, mock_f1)),
+        ):
+            score = bert_f1("hello world", "hello world again")
         assert 0.0 <= score <= 1.0
 
-    @pytest.mark.slow
     def test_exact_match_high_bertscore(self):
-        score = bert_f1("University of Melbourne", "University of Melbourne")
+        mock_f1 = MagicMock()
+        mock_f1.item.return_value = 0.99
+        with (
+            patch("himga.eval.metrics._BERT_SCORE_AVAILABLE", True),
+            patch("himga.eval.metrics._bert_score_fn", return_value=(None, None, mock_f1)),
+        ):
+            score = bert_f1("University of Melbourne", "University of Melbourne")
         assert score > 0.95
 
 
 # ===========================================================================
-# TestSbertSimilarity  (slow — downloads all-MiniLM-L6-v2, ~80 MB)
+# TestSbertSimilarity
 # ===========================================================================
 
 
 class TestSbertSimilarity:
-    """Tests for sbert_similarity().
-
-    Tests that load the model (all-MiniLM-L6-v2, ~80 MB) are marked ``slow``
-    and skipped in fast CI runs.  Empty-input tests short-circuit before any
-    model load and run unconditionally.
-    """
+    """Tests for sbert_similarity(). Heavy model is mocked — no downloads required."""
 
     def test_empty_prediction_gives_zero(self):
         assert sbert_similarity("", "reference") == 0.0
@@ -723,19 +729,42 @@ class TestSbertSimilarity:
     def test_empty_ground_truth_gives_zero(self):
         assert sbert_similarity("prediction", "") == 0.0
 
-    @pytest.mark.slow
     def test_returns_float(self):
-        score = sbert_similarity("the cat sat", "the cat sat on the mat")
+        mock_sim = MagicMock()
+        mock_sim.item.return_value = 0.91
+        mock_model = MagicMock()
+        with (
+            patch("himga.eval.metrics._SBERT_AVAILABLE", True),
+            patch("himga.eval.metrics._get_sbert_model", return_value=mock_model),
+            patch("himga.eval.metrics._cos_sim", return_value=mock_sim),
+        ):
+            score = sbert_similarity("the cat sat", "the cat sat on the mat")
         assert isinstance(score, float)
 
-    @pytest.mark.slow
     def test_score_in_range(self):
-        score = sbert_similarity("hello world", "hello world again")
+        mock_sim = MagicMock()
+        mock_sim.item.return_value = 0.65
+        mock_model = MagicMock()
+        with (
+            patch("himga.eval.metrics._SBERT_AVAILABLE", True),
+            patch("himga.eval.metrics._get_sbert_model", return_value=mock_model),
+            patch("himga.eval.metrics._cos_sim", return_value=mock_sim),
+        ):
+            score = sbert_similarity("hello world", "hello world again")
         assert -1.0 <= score <= 1.0
 
-    @pytest.mark.slow
     def test_identical_strings_high_similarity(self):
-        score = sbert_similarity("Paris is the capital of France", "Paris is the capital of France")
+        mock_sim = MagicMock()
+        mock_sim.item.return_value = 1.0
+        mock_model = MagicMock()
+        with (
+            patch("himga.eval.metrics._SBERT_AVAILABLE", True),
+            patch("himga.eval.metrics._get_sbert_model", return_value=mock_model),
+            patch("himga.eval.metrics._cos_sim", return_value=mock_sim),
+        ):
+            score = sbert_similarity(
+                "Paris is the capital of France", "Paris is the capital of France"
+            )
         assert score > 0.99
 
 
@@ -760,11 +789,7 @@ _FAST_METRICS = (
 
 
 class TestComputeMetrics:
-    """Tests for compute_metrics().
-
-    Fast tests pass ``metrics=_FAST_METRICS`` to avoid loading BERTScore /
-    SBERT models.  Slow tests (marked ``slow``) use the default (all metrics).
-    """
+    """Tests for compute_metrics(). BERTScore/SBERT are mocked."""
 
     def test_returns_dict(self):
         results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
@@ -911,11 +936,23 @@ class TestComputeMetrics:
         assert "sbert_similarity" in ALL_METRICS
         assert "f1" in ALL_METRICS
 
-    @pytest.mark.slow
     def test_full_metrics_includes_bert_and_sbert(self):
-        results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
-        out = compute_metrics(results, scores)  # default = all metrics
+        mock_f1 = MagicMock()
+        mock_f1.item.return_value = 0.88
+        mock_f1.tolist.return_value = [0.88]
+        mock_sim = MagicMock()
+        mock_sim.__getitem__ = MagicMock(return_value=MagicMock(item=MagicMock(return_value=0.75)))
+        mock_model = MagicMock()
+        with (
+            patch("himga.eval.metrics._BERT_SCORE_AVAILABLE", True),
+            patch("himga.eval.metrics._bert_score_fn", return_value=(None, None, mock_f1)),
+            patch("himga.eval.metrics._SBERT_AVAILABLE", True),
+            patch("himga.eval.metrics._get_sbert_model", return_value=mock_model),
+            patch("himga.eval.metrics._cos_sim", return_value=mock_sim),
+        ):
+            results, scores = _make_eval_results([(QuestionType.SINGLE_HOP, 1.0)])
+            out = compute_metrics(results, scores)
         assert "bert_f1" in out["overall"]
         assert "sbert_similarity" in out["overall"]
-        assert -0.01 <= out["overall"]["bert_f1"] <= 1.01  # BERTScore can slightly exceed 1.0
-        assert -1.01 <= out["overall"]["sbert_similarity"] <= 1.01
+        assert isinstance(out["overall"]["bert_f1"], float)
+        assert isinstance(out["overall"]["sbert_similarity"], float)

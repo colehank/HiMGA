@@ -1,5 +1,7 @@
 """Tests for himga.llm: BaseLLMClient contract, MockLLMClient, and get_client()."""
 
+from unittest.mock import MagicMock, patch
+
 import pytest
 
 from himga.llm import BaseLLMClient, get_client
@@ -212,21 +214,67 @@ class TestAnthropicClientUnit:
 
 
 # ---------------------------------------------------------------------------
-# TestAnthropicClientIntegration  (real API, skipped in CI)
+# TestAnthropicClientChat
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.integration
-class TestAnthropicClientIntegration:
-    """Real Anthropic API calls — skipped unless HIMGA_INTEGRATION_TESTS=1."""
+class TestAnthropicClientChat:
+    """AnthropicClient.chat() with mocked Anthropic SDK."""
 
     def test_chat_returns_nonempty_string(self):
         from himga.llm.client import AnthropicClient
 
-        client = AnthropicClient(model="claude-haiku-4-5-20251001")
-        result = client.chat(
-            [{"role": "user", "content": "Reply with exactly: pong"}],
-            max_tokens=10,
-        )
+        mock_block = MagicMock()
+        mock_block.text = "pong"
+        mock_resp = MagicMock()
+        mock_resp.content = [mock_block]
+
+        with patch("anthropic.Anthropic") as mock_sdk:
+            client = AnthropicClient(model="claude-haiku-4-5-20251001")
+            mock_sdk.return_value.messages.create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            result = client.chat(
+                [{"role": "user", "content": "Reply with exactly: pong"}],
+                max_tokens=10,
+            )
         assert isinstance(result, str)
-        assert len(result) > 0
+        assert result == "pong"
+
+    def test_chat_skips_thinking_block(self):
+        from himga.llm.client import AnthropicClient
+
+        thinking_block = MagicMock(spec=[])  # no .text attribute
+        text_block = MagicMock()
+        text_block.text = "answer"
+        mock_resp = MagicMock()
+        mock_resp.content = [thinking_block, text_block]
+
+        with patch("anthropic.Anthropic") as mock_sdk:
+            client = AnthropicClient()
+            mock_sdk.return_value.messages.create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            result = client.chat([{"role": "user", "content": "Q"}])
+        assert result == "answer"
+
+    def test_system_message_extracted(self):
+        from himga.llm.client import AnthropicClient
+
+        mock_block = MagicMock()
+        mock_block.text = "ok"
+        mock_resp = MagicMock()
+        mock_resp.content = [mock_block]
+
+        with patch("anthropic.Anthropic") as mock_sdk:
+            client = AnthropicClient()
+            mock_create = mock_sdk.return_value.messages.create
+            mock_create.return_value = mock_resp
+            client._client = mock_sdk.return_value
+            client.chat(
+                [
+                    {"role": "system", "content": "You are helpful."},
+                    {"role": "user", "content": "Hi"},
+                ]
+            )
+        call_kwargs = mock_create.call_args.kwargs
+        assert call_kwargs["system"] == "You are helpful."
+        assert all(m["role"] != "system" for m in call_kwargs["messages"])

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import pytest
 
 
@@ -36,25 +38,12 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 
 
 @pytest.fixture(scope="session", autouse=True)
-def ensure_nltk_data() -> None:
-    """Download required NLTK corpora once per test session.
+def _mock_nltk_download() -> None:
+    """Prevent nltk.download() from hitting the network during tests.
 
-    Downloads ``punkt_tab`` and ``wordnet`` if not already present.
-    Runs automatically for every session so individual tests need not
-    call ``_ensure_nltk_data()`` explicitly.
+    NLTK data (punkt_tab, wordnet) is pre-installed in CI via the workflow
+    setup step and locally via prior developer setup.  Calling nltk.download()
+    inside tests only wastes time waiting on a proxy timeout.
     """
-    import nltk
-
-    for corpus, finder_path in [
-        ("punkt_tab", "tokenizers/punkt_tab"),
-        ("wordnet", "corpora/wordnet"),
-    ]:
-        try:
-            nltk.data.find(finder_path)
-        except LookupError:
-            success = nltk.download(corpus, quiet=False)
-            if not success:
-                raise LookupError(
-                    f"Failed to download NLTK corpus '{corpus}'. "
-                    f"Run: python -m nltk.downloader {corpus}"
-                )
+    with patch("himga.eval.metrics._nltk_ready", True):
+        yield
