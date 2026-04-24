@@ -18,6 +18,8 @@ _CATEGORY_TO_QTYPE: dict[int, QuestionType] = {
 
 
 def _parse_session(session_num: int, turns: list[dict], date_str: str | None) -> Session:
+    session_id = str(session_num)
+    session_date = parse_date(date_str)
     messages = []
     for turn in turns:
         text = turn.get("text", "")
@@ -29,13 +31,16 @@ def _parse_session(session_num: int, turns: list[dict], date_str: str | None) ->
                 role=turn["speaker"],
                 content=text,
                 turn_id=turn.get("dia_id"),
+                session_id=session_id,
+                session_date_str=date_str,
+                session_date=session_date,
             )
         )
     return Session(
-        session_id=str(session_num),
+        session_id=session_id,
         messages=messages,
         date_str=date_str,
-        date=parse_date(date_str),
+        date=session_date,
     )
 
 

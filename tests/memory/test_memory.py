@@ -2,7 +2,7 @@
 
 import pytest
 
-from himga.data.schema import Message, Session
+from himga.data.schema import Message
 from himga.memory import BaseMemory, NullMemory
 
 # ---------------------------------------------------------------------------
@@ -12,12 +12,11 @@ from himga.memory import BaseMemory, NullMemory
 
 @pytest.fixture
 def message() -> Message:
-    return Message(role="user", content="Hello, how are you?")
-
-
-@pytest.fixture
-def session() -> Session:
-    return Session(session_id="s1", messages=[])
+    return Message(
+        role="user",
+        content="Hello, how are you?",
+        session_id="s1",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -45,7 +44,7 @@ class TestBaseMemoryInterface:
 
     def test_subclass_missing_retrieve_raises(self):
         class Incomplete(BaseMemory):
-            def ingest(self, message, session):
+            def ingest(self, message):
                 pass
 
             def reset(self):
@@ -56,7 +55,7 @@ class TestBaseMemoryInterface:
 
     def test_subclass_missing_reset_raises(self):
         class Incomplete(BaseMemory):
-            def ingest(self, message, session):
+            def ingest(self, message):
                 pass
 
             def retrieve(self, query):
@@ -67,7 +66,7 @@ class TestBaseMemoryInterface:
 
     def test_full_subclass_instantiates_successfully(self):
         class Full(BaseMemory):
-            def ingest(self, message, session):
+            def ingest(self, message):
                 pass
 
             def retrieve(self, query):
@@ -90,7 +89,7 @@ class TestNullMemoryBasic:
     def test_is_instance_of_base_memory(self):
         assert isinstance(NullMemory(), BaseMemory)
 
-    def test_retrieve_returns_empty_string(self, message, session):
+    def test_retrieve_returns_empty_string(self, message):
         nm = NullMemory()
         assert nm.retrieve("anything") == ""
 
@@ -98,13 +97,13 @@ class TestNullMemoryBasic:
         nm = NullMemory()
         assert nm.retrieve("") == ""
 
-    def test_ingest_does_not_raise(self, message, session):
+    def test_ingest_does_not_raise(self, message):
         nm = NullMemory()
-        nm.ingest(message, session)  # should not raise
+        nm.ingest(message)
 
     def test_reset_does_not_raise(self):
         nm = NullMemory()
-        nm.reset()  # should not raise
+        nm.reset()
 
 
 # ---------------------------------------------------------------------------
@@ -115,20 +114,20 @@ class TestNullMemoryBasic:
 class TestNullMemoryStatelessness:
     """NullMemory must remain stateless regardless of ingest calls."""
 
-    def test_retrieve_after_ingest_still_empty(self, message, session):
+    def test_retrieve_after_ingest_still_empty(self, message):
         nm = NullMemory()
-        nm.ingest(message, session)
+        nm.ingest(message)
         assert nm.retrieve("anything") == ""
 
-    def test_retrieve_after_many_ingests_still_empty(self, session):
+    def test_retrieve_after_many_ingests_still_empty(self):
         nm = NullMemory()
         for i in range(10):
-            nm.ingest(Message(role="user", content=f"msg {i}"), session)
+            nm.ingest(Message(role="user", content=f"msg {i}", session_id="s1"))
         assert nm.retrieve("msg 5") == ""
 
-    def test_retrieve_after_reset_still_empty(self, message, session):
+    def test_retrieve_after_reset_still_empty(self, message):
         nm = NullMemory()
-        nm.ingest(message, session)
+        nm.ingest(message)
         nm.reset()
         assert nm.retrieve("anything") == ""
 
@@ -137,11 +136,10 @@ class TestNullMemoryStatelessness:
         nm.reset()
         nm.reset()
 
-    def test_two_instances_are_independent(self, message, session):
+    def test_two_instances_are_independent(self, message):
         nm1 = NullMemory()
         nm2 = NullMemory()
-        nm1.ingest(message, session)
-        # nm2 should be unaffected
+        nm1.ingest(message)
         assert nm2.retrieve("anything") == ""
 
 
@@ -160,7 +158,7 @@ class TestMemoryInterfaceContract:
             def __init__(self):
                 self._store: list[str] = []
 
-            def ingest(self, message: Message, session: Session) -> None:
+            def ingest(self, message: Message) -> None:
                 self._store.append(message.content)
 
             def retrieve(self, query: str) -> str:
@@ -171,31 +169,31 @@ class TestMemoryInterfaceContract:
 
         return StubMemory()
 
-    def test_ingest_then_retrieve_returns_content(self, message, session):
+    def test_ingest_then_retrieve_returns_content(self, message):
         mem = self._make_stub_memory()
-        mem.ingest(message, session)
+        mem.ingest(message)
         result = mem.retrieve("query")
         assert "Hello, how are you?" in result
 
-    def test_multiple_ingest_all_appear_in_retrieve(self, session):
+    def test_multiple_ingest_all_appear_in_retrieve(self):
         mem = self._make_stub_memory()
-        mem.ingest(Message(role="user", content="first"), session)
-        mem.ingest(Message(role="assistant", content="second"), session)
+        mem.ingest(Message(role="user", content="first", session_id="s1"))
+        mem.ingest(Message(role="assistant", content="second", session_id="s1"))
         result = mem.retrieve("anything")
         assert "first" in result
         assert "second" in result
 
-    def test_reset_clears_all_ingested_content(self, message, session):
+    def test_reset_clears_all_ingested_content(self, message):
         mem = self._make_stub_memory()
-        mem.ingest(message, session)
+        mem.ingest(message)
         mem.reset()
         assert mem.retrieve("query") == ""
 
-    def test_ingest_after_reset_works_normally(self, session):
+    def test_ingest_after_reset_works_normally(self):
         mem = self._make_stub_memory()
-        mem.ingest(Message(role="user", content="before reset"), session)
+        mem.ingest(Message(role="user", content="before reset", session_id="s1"))
         mem.reset()
-        mem.ingest(Message(role="user", content="after reset"), session)
+        mem.ingest(Message(role="user", content="after reset", session_id="s1"))
         result = mem.retrieve("query")
         assert "after reset" in result
         assert "before reset" not in result

@@ -32,7 +32,7 @@ class BaseAgent:
         """
         for session in sample.sessions:
             for message in session.messages:
-                self.memory.ingest(message, session)
+                self.memory.ingest(message)
 
     def answer(self, question: str) -> str:
         """Retrieve context and generate an answer for *question*.

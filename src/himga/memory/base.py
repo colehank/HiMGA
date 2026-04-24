@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from himga.data.schema import Message, Session
+from himga.data.schema import Message
 
 
 class BaseMemory(ABC):
@@ -16,15 +16,15 @@ class BaseMemory(ABC):
     """
 
     @abstractmethod
-    def ingest(self, message: Message, session: Session) -> None:
+    def ingest(self, message: Message) -> None:
         """Write one message into the memory system.
 
         Parameters
         ----------
         message : Message
-            The utterance to store.
-        session : Session
-            Enclosing session; provides timestamp and session-level context.
+            The utterance to store.  Session context (``session_id``,
+            ``session_date``, ``session_title``) is pre-populated on the
+            message by :meth:`~himga.agent.base.BaseAgent.ingest_sample`.
         """
 
     @abstractmethod

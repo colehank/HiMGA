@@ -6,6 +6,10 @@ import asyncio
 import os
 from abc import ABC, abstractmethod
 
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 
 def _run_async(coro):
     """Run *coro* whether or not there is already a running event loop (e.g. Jupyter)."""

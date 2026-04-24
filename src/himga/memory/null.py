@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from himga.data.schema import Message, Session
+from himga.data.schema import Message
 from himga.memory.base import BaseMemory
 
 
@@ -13,7 +13,7 @@ class NullMemory(BaseMemory):
     and for wiring up the eval pipeline before real memory systems exist.
     """
 
-    def ingest(self, message: Message, session: Session) -> None:
+    def ingest(self, message: Message) -> None:
         pass
 
     def retrieve(self, query: str) -> str:

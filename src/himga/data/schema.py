@@ -44,12 +44,24 @@ class Message:
         LoCoMo dia_id, e.g. "D1:3". None for LongMemEval.
     date_str : str or None
         Raw timestamp string. Parsing is deferred to TemporalParser.
+    session_id : str or None
+        Identifier of the enclosing session.
+    session_date_str : str or None
+        Raw session-level timestamp string.
+    session_date : datetime or None
+        Parsed session-level datetime.
+    session_title : str or None
+        Optional session title (LongMemEval only).
     """
 
     role: str
     content: str
     turn_id: str | None = None
     date_str: str | None = None
+    session_id: str | None = None
+    session_date_str: str | None = None
+    session_date: datetime | None = None
+    session_title: str | None = None
 
 
 @dataclass

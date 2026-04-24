@@ -27,12 +27,12 @@ class SpyMemory(NullMemory):
     """NullMemory that records ingest call arguments."""
 
     def __init__(self, retrieve_result: str = ""):
-        self._ingest_calls: list[tuple[Message, Session]] = []
+        self._ingest_calls: list[Message] = []
         self._reset_count = 0
         self._retrieve_result = retrieve_result
 
-    def ingest(self, message: Message, session: Session) -> None:
-        self._ingest_calls.append((message, session))
+    def ingest(self, message: Message) -> None:
+        self._ingest_calls.append(message)
 
     def retrieve(self, query: str) -> str:
         return self._retrieve_result
@@ -51,7 +51,8 @@ def _make_sample(
         Session(
             session_id=f"s{i}",
             messages=[
-                Message(role="user", content=f"s{i} msg {j}") for j in range(messages_per_session)
+                Message(role="user", content=f"s{i} msg {j}", session_id=f"s{i}")
+                for j in range(messages_per_session)
             ],
         )
         for i in range(n_sessions)
@@ -112,7 +113,7 @@ class TestIngestSample:
         agent = BaseAgent(memory=mem, llm=MockLLMClient())
         sample = _make_sample(n_sessions=1, messages_per_session=2)
         agent.ingest_sample(sample)
-        ingested_contents = [m.content for m, _ in mem._ingest_calls]
+        ingested_contents = [m.content for m in mem._ingest_calls]
         assert ingested_contents == ["s0 msg 0", "s0 msg 1"]
 
     def test_ingest_called_with_correct_session(self):
@@ -120,7 +121,7 @@ class TestIngestSample:
         agent = BaseAgent(memory=mem, llm=MockLLMClient())
         sample = _make_sample(n_sessions=2, messages_per_session=1)
         agent.ingest_sample(sample)
-        session_ids = [s.session_id for _, s in mem._ingest_calls]
+        session_ids = [m.session_id for m in mem._ingest_calls]
         assert session_ids == ["s0", "s1"]
 
     def test_empty_sample_does_not_raise(self):
@@ -135,7 +136,7 @@ class TestIngestSample:
         agent = BaseAgent(memory=mem, llm=MockLLMClient())
         sample = _make_sample(n_sessions=3, messages_per_session=1)
         agent.ingest_sample(sample)
-        session_ids = [s.session_id for _, s in mem._ingest_calls]
+        session_ids = [m.session_id for m in mem._ingest_calls]
         assert session_ids == ["s0", "s1", "s2"]
 
 

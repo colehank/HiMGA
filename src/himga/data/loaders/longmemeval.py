@@ -28,12 +28,19 @@ _QTYPE_MAP: dict[str, QuestionType] = {
 
 
 def _parse_session(messages_raw: list[dict], session_id: str, date_str: str | None) -> Session:
+    session_date = parse_date(date_str)
     messages = [
-        Message(role=m.get("role", "user"), content=m.get("content", "")) for m in messages_raw
+        Message(
+            role=m.get("role", "user"),
+            content=m.get("content", ""),
+            session_id=session_id,
+            session_date_str=date_str,
+            session_date=session_date,
+            session_title=m.get("title"),
+        )
+        for m in messages_raw
     ]
-    return Session(
-        session_id=session_id, messages=messages, date_str=date_str, date=parse_date(date_str)
-    )
+    return Session(session_id=session_id, messages=messages, date_str=date_str, date=session_date)
 
 
 def _parse_question(raw: dict) -> Sample:
