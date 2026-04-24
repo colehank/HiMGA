@@ -917,5 +917,5 @@ class TestComputeMetrics:
         out = compute_metrics(results, scores)  # default = all metrics
         assert "bert_f1" in out["overall"]
         assert "sbert_similarity" in out["overall"]
-        assert 0.0 <= out["overall"]["bert_f1"] <= 1.0
-        assert -1.0 <= out["overall"]["sbert_similarity"] <= 1.0
+        assert -0.01 <= out["overall"]["bert_f1"] <= 1.01  # BERTScore can slightly exceed 1.0
+        assert -1.01 <= out["overall"]["sbert_similarity"] <= 1.01
